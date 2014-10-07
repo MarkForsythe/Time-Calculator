@@ -6,7 +6,13 @@ var makingamount = 0;
 var makingamountdisp;
 
 var isclockedin = false;
-var setupcomplete;
+
+var worktime = [];
+var worktimecount;
+
+
+
+
 
 var $madetoday = $('#madetoday');
 var $hourstoday = $('#hourstoday');
@@ -25,22 +31,32 @@ var $enter = $('#enter');
 
 
 
+//$hourstoday = localStorage.cachedHours;
+
+$madetoday.html(localStorage.cachedPay);
+$hourstoday.html(localStorage.cachedHours);
+
 $clockedin.hide();
 $clockout.hide();
+$payrate.hide();
 
 
-
-if (window.localStorage.getItem("SetupIsComplete") === true) {
-	$madetoday.html(window.localStorage.getItem("cachedPay"));
-	$hourstoday.html(window.localStorage.getItem("cachedHours"));
-	$payrate.html(window.localStorage.getItem("Payrate"));
-	$('#enter').hide();
-	$clockedin.fadeIn();
-	$setuphide1.hide();
-	$setuphide2.hide();
-	$setuphide3.hide();
-	$setuphide4.hide();
+if(typeof(Storage) !== "undefined") {
+   if (localStorage.setupcomplete == true) {
+		$madetoday.html(localStorage.cachedPay);
+		$hourstoday.html(localStorage.cachedHours);
+		$payrate.html(localStorage.Payrate);
+		$('#enter').hide();
+		$clockedin.fadeIn();
+		$setuphide1.hide();
+		$setuphide2.hide();
+		$setuphide3.hide();
+		$setuphide4.hide();
+	};
+} else {
+    //console.log(ERRORRR);
 };
+
 
 var hour = 0;
 var minute = 0;
@@ -50,12 +66,23 @@ var second = 0;
 
 
 $enter.click(function () {
+	
 	hourcount = $('#hourcount').val();
 	paycheckamount = $('#paycheckamount').val();
 	hourlyrate = (paycheckamount / hourcount) * 10000;
-	hourlyratedisp = hourlyrate / 10000;
-	window.localStorage.setItem("Payrate", hourlyratedisp);
-	$payrate.html(window.localStorage.getItem("Payrate"));
+	hourlyratedisp = '$' + (hourlyrate / 10000).toFixed(2) + '/hr';
+	$payrate.fadeIn();
+	if(typeof(Storage) !== "undefined") {
+	    localStorage.Payrate = hourlyratedisp;
+		$payrate.html(localStorage.Payrate);
+		localStorage.setupcomplete = true;
+		console.log(localStorage.setupcomplete);
+	} else {
+	    // Sorry! No Web Storage support..
+	};
+
+	
+
 	$('#enter').hide();
 	$clockedin.fadeIn();
 	$setuphide1.hide();
@@ -63,7 +90,8 @@ $enter.click(function () {
 	$setuphide3.hide();
 	$setuphide4.hide();	
 	setupcomplete = true;
-	window.localStorage.setItem("SetupIsComplete", true);
+	//sessionStorage.islogged = true;
+	//window.localStorage.setItem("SetupIsComplete", true);
 	console.log(hourlyrate);
 });
 
@@ -71,7 +99,8 @@ $clockedin.click(function () {
 	isclockedin = true;
 	$clockedin.hide();
 	$clockout.fadeIn();
-	setInterval(function () {
+});
+setInterval(function () {
 		if (isclockedin === true) {
 	
 			makingamount += (hourlyrate / 3600);
@@ -89,31 +118,31 @@ $clockedin.click(function () {
 
 
 			$timeprogression.html(hour + 'h ' + minute + 'm ' + second + 's');
-
-		
-			
-
 			$moneyprogression.html('$' + makingamountdisp.toFixed(3));
-			$thisperiod.html('$' + makingamountdisp.toFixed(2))
 		};
-
 	}, 1000);
-	
-
-	
-});
 
 $clockout.click(function () {
 		isclockedin = false;
 		//gatheredPosts.push(makingamountdisp);
 		$clockout.hide();
 		$clockedin.fadeIn();
-		window.localStorage.setItem("cachedPay", makingamountdisp.toFixed(2));
-		window.localStorage.setItem("cachedHours", hour + 'h ' + minute + 'm ' + second + 's');
-		$madetoday.html(window.localStorage.getItem("cachedPay"));
-		$hourstoday.html(window.localStorage.getItem("cachedHours"));
+		if(typeof(Storage) !== "undefined") {
+		    localStorage.cachedPay = makingamountdisp.toFixed(2);
+			localStorage.cachedHours = hour + 'h ' + minute + 'm';
+			$madetoday.html(localStorage.cachedPay);
+			$hourstoday.html(localStorage.cachedHours);
+		} else {
+		    // Sorry! No Web Storage support..
+		};
+		
+		makingamount = 0;
+		minute = 0;
+		second = 0;
+		hour = 0;
 
 });
+
 
 
 
