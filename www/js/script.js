@@ -1,21 +1,22 @@
 var hourcount;
 var paycheckamount;
-var hourlyrate = 0;
+var hourlyrate = localStorage.hourlyrate;
 var hourlyratedisp;
 var makingamount = 0;
 var makingamountdisp;
 
 var isclockedin = false;
 
-var worktime = [];
-var worktimecount;
+var hour = 0;
+var minute = 0;
+var second = 0;
 
 
+//var worktime = [];
+//var worktimecount;
 
+//var setupcheck = localStorage.setupcomplete;
 
-
-var $madetoday = $('#madetoday');
-var $hourstoday = $('#hourstoday');
 var $moneyprogression = $('#moneyprogression');
 var $timeprogression = $('#timeprogression');
 var $payrate = $('#payrate');
@@ -28,39 +29,58 @@ var $clockedin = $('#clockedin');
 var $clockout = $('#clockout');
 var $thisperiod = $('#thisperiod');
 var $enter = $('#enter');
+var $changerate = $('#changerate');
+var $clearbtn = $('#clearbtn');
 
 
 
 //$hourstoday = localStorage.cachedHours;
 
-$madetoday.html(localStorage.cachedPay);
-$hourstoday.html(localStorage.cachedHours);
-
+// $madetoday.html(localStorage.cachedPay);
+// $hourstoday.html(localStorage.cachedHours);
 $clockedin.hide();
 $clockout.hide();
-$payrate.hide();
 
 
-if(typeof(Storage) !== "undefined") {
-   if (localStorage.setupcomplete == true) {
-		$madetoday.html(localStorage.cachedPay);
-		$hourstoday.html(localStorage.cachedHours);
-		$payrate.html(localStorage.Payrate);
-		$('#enter').hide();
-		$clockedin.fadeIn();
-		$setuphide1.hide();
-		$setuphide2.hide();
-		$setuphide3.hide();
-		$setuphide4.hide();
+
+if (localStorage.Payrate !== undefined) {
+	$payrate.html(localStorage.Payrate);
+	$('#enter').hide();
+	$clockedin.fadeIn();
+	$setuphide1.hide();
+	$setuphide2.hide();
+	$setuphide3.hide();
+	$setuphide4.hide();
+	for(var incr = 1; incr <= localStorage.paycount; incr++ ) { 
+		console.log('Inside for loop')
+		$('#loggedpay').prepend('<li>' + localStorage.getItem('cachedPay'+incr) + ' ' + localStorage['cachedHours'+incr] + '</li>');
 	};
-} else {
-    //console.log(ERRORRR);
+}
+else {
+	localStorage.paycount = 0;
 };
 
+//Change your payrate
+$changerate.click(function () {
+		$('#enter').show();
+		$clockedin.fadeOut();
+		$setuphide1.fadeIn();
+		$setuphide2.fadeIn();
+		$setuphide3.fadeIn();
+		$setuphide4.fadeIn();
+		$changerate.hide();
 
-var hour = 0;
-var minute = 0;
-var second = 0;
+});
+
+$clearbtn.click(function () {
+	$('#loggedpay').empty();
+	for(var incr = 1; incr <= localStorage.paycount; incr++ ) { 
+		localStorage.removeItem('cachedPay'+incr);
+		localStorage.removeItem('cachedHours'+incr);
+	};
+	localStorage.paycount = 0;
+
+});
 
 
 
@@ -74,14 +94,11 @@ $enter.click(function () {
 	$payrate.fadeIn();
 	if(typeof(Storage) !== "undefined") {
 	    localStorage.Payrate = hourlyratedisp;
+	    localStorage.hourlyrate = hourlyrate;
 		$payrate.html(localStorage.Payrate);
 		localStorage.setupcomplete = true;
 		console.log(localStorage.setupcomplete);
-	} else {
-	    // Sorry! No Web Storage support..
 	};
-
-	
 
 	$('#enter').hide();
 	$clockedin.fadeIn();
@@ -89,7 +106,8 @@ $enter.click(function () {
 	$setuphide2.hide();
 	$setuphide3.hide();
 	$setuphide4.hide();	
-	setupcomplete = true;
+	$payrate.html(localStorage.Payrate);
+	$changerate.show();
 	//sessionStorage.islogged = true;
 	//window.localStorage.setItem("SetupIsComplete", true);
 	console.log(hourlyrate);
@@ -115,32 +133,33 @@ setInterval(function () {
 				hour += 1;
 				minute = 0;
 			};
-
-
 			$timeprogression.html(hour + 'h ' + minute + 'm ' + second + 's');
 			$moneyprogression.html('$' + makingamountdisp.toFixed(3));
 		};
 	}, 1000);
 
+
+var parsedpaycount;
 $clockout.click(function () {
 		isclockedin = false;
-		//gatheredPosts.push(makingamountdisp);
 		$clockout.hide();
 		$clockedin.fadeIn();
-		if(typeof(Storage) !== "undefined") {
-		    localStorage.cachedPay = makingamountdisp.toFixed(2);
-			localStorage.cachedHours = hour + 'h ' + minute + 'm';
-			$madetoday.html(localStorage.cachedPay);
-			$hourstoday.html(localStorage.cachedHours);
-		} else {
-		    // Sorry! No Web Storage support..
-		};
 		
+		parsedpaycount = parseInt(localStorage.getItem('paycount')) + 1;
+		localStorage.paycount = parsedpaycount;
+		console.log(localStorage.paycount);
+	
+
+		if(typeof(Storage) !== "undefined") {
+		    localStorage.setItem('cachedPay'+localStorage.paycount, makingamountdisp.toFixed(2));
+			localStorage['cachedHours'+localStorage.paycount] = hour + 'h ' + minute + 'm';
+			
+			$('#loggedpay').prepend('<li>' + localStorage.getItem('cachedPay' + localStorage.paycount) + ' ' + localStorage['cachedHours'+localStorage.paycount] + '</li>');
+		};
 		makingamount = 0;
 		minute = 0;
 		second = 0;
 		hour = 0;
-
 });
 
 

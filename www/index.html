@@ -32,22 +32,26 @@
     <body>
         <div class="app">
             
-              <p id="payrate">$1.00hr</p>
+              <p id="payrate">$1.00hr</p><button id="changerate">Change</button>
                 <p class="setup" id="setup">Please get a pay-stub and enter the amount of hours you got:</p>
                 <input class="setup" id="hourcount"></input>
                 <p class="setup" id="setup2">Now enter the amount you earned after taxes:</p>
                 <input class="setup" id="paycheckamount"></input>
                 
                 <button id="enter">Enter</button>
-              <button id="clockedin">Clock-in</button>
-              <button id="clockout">Clock-out</button>
-              
                 <p id="moneyprogression">$0.000</p>
-                <p id="timeprogression">XX</p>
+                
+                <p id="timeprogression"></p>
+                <button id="clockedin">Clock-in</button>
+                <button id="clockout">Clock-out</button>
 
               <h4>Earnings</h4>
-                <span id="madetoday">xx</span>
-                <span id="hourstoday">xx</span>
+              <button id="clearbtn">Clear</button>
+              <ul id="loggedpay">
+                <li>test</li>
+
+              </ul>
+             
         </div>
         <script type="text/javascript" src="js/index.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
