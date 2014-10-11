@@ -31,7 +31,25 @@ h1 {
     text-align:center;
 }
 
-.event {
+#payrate {
+    font-size: 22px;
+
+}
+
+#moneyprogression {
+    font-size: 40px;
+}
+
+#timeprogression {
+    font-size: 25px;
+}
+
+#changerate {
+    float: right;
+}
+
+
+/*.event {
     border-radius:4px;
     -webkit-border-radius:4px;
     color:#FFFFFF;
@@ -65,16 +83,5 @@ h1 {
 .blink {
     animation:fade 3000ms infinite;
     -webkit-animation:fade 3000ms infinite;
-}
+}*/
 
-#payrate {
-    font-size: 15px;
-}
-
-#moneyprogression {
-    font-size: 40px;
-}
-
-#timeprogression {
-    font-size: 25px;
-}

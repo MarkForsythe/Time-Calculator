@@ -12,6 +12,8 @@ var minute = 0;
 var second = 0;
 
 
+
+
 //var worktime = [];
 //var worktimecount;
 
@@ -32,6 +34,15 @@ var $enter = $('#enter');
 var $changerate = $('#changerate');
 var $clearbtn = $('#clearbtn');
 
+var $totals = $('#totals');
+var $setupalert = $('#setupalert');
+
+var totalsparse = 0;
+
+
+$setupalert.html('<div class="alert alert-info" role="alert"><p class="setup" id="setup">Please get a pay-stub and enter...</p></div>');
+
+
 
 
 //$hourstoday = localStorage.cachedHours;
@@ -44,6 +55,7 @@ $clockout.hide();
 
 
 if (localStorage.Payrate !== undefined) {
+
 	$payrate.html(localStorage.Payrate);
 	$('#enter').hide();
 	$clockedin.fadeIn();
@@ -51,9 +63,18 @@ if (localStorage.Payrate !== undefined) {
 	$setuphide2.hide();
 	$setuphide3.hide();
 	$setuphide4.hide();
+	$setupalert.hide();
+
+	for(var incr = 1; incr <= localStorage.paycount; incr++ ) { 
+		totalsparse += parseFloat(localStorage.getItem('cachedPay'+incr));
+		console.log(totalsparse);
+		$totals.html('<h3>' + totalsparse.toFixed(2) + ' ' + localStorage.totalhour + 'h ' + localStorage.totalminute + 'm</h3>');
+	};
+
+	
 	for(var incr = 1; incr <= localStorage.paycount; incr++ ) { 
 		console.log('Inside for loop')
-		$('#loggedpay').prepend('<li>' + localStorage.getItem('cachedPay'+incr) + ' ' + localStorage['cachedHours'+incr] + '</li>');
+		$('#loggedpay').prepend('<li class="list-group-item">' + localStorage.getItem('cachedPay'+incr) + ' ' + localStorage['cachedHours'+incr] + '</li>');
 	};
 }
 else {
@@ -69,6 +90,9 @@ $changerate.click(function () {
 		$setuphide3.fadeIn();
 		$setuphide4.fadeIn();
 		$changerate.hide();
+		$payrate.hide();
+		$setupalert.show();
+
 
 });
 
@@ -79,6 +103,10 @@ $clearbtn.click(function () {
 		localStorage.removeItem('cachedHours'+incr);
 	};
 	localStorage.paycount = 0;
+	totalsparse = 0;
+	localStorage.totalhour = 0;
+	localStorage.totalminute = 0;
+	$totals.html(totalsparse + ' ' + localStorage.totalhour + 'h ' + localStorage.totalminute + 'm');
 
 });
 
@@ -92,13 +120,13 @@ $enter.click(function () {
 	hourlyrate = (paycheckamount / hourcount) * 10000;
 	hourlyratedisp = '$' + (hourlyrate / 10000).toFixed(2) + '/hr';
 	$payrate.fadeIn();
-	if(typeof(Storage) !== "undefined") {
+	//if(typeof(Storage) !== "undefined") {
 	    localStorage.Payrate = hourlyratedisp;
 	    localStorage.hourlyrate = hourlyrate;
 		$payrate.html(localStorage.Payrate);
 		localStorage.setupcomplete = true;
 		console.log(localStorage.setupcomplete);
-	};
+	//};
 
 	$('#enter').hide();
 	$clockedin.fadeIn();
@@ -108,9 +136,13 @@ $enter.click(function () {
 	$setuphide4.hide();	
 	$payrate.html(localStorage.Payrate);
 	$changerate.show();
+	$setupalert.hide();
 	//sessionStorage.islogged = true;
 	//window.localStorage.setItem("SetupIsComplete", true);
 	console.log(hourlyrate);
+
+	localStorage.totalhour = '0';
+	localStorage.totalminute = '0';
 });
 
 $clockedin.click(function () {
@@ -118,48 +150,75 @@ $clockedin.click(function () {
 	$clockedin.hide();
 	$clockout.fadeIn();
 });
+
+
 setInterval(function () {
-		if (isclockedin === true) {
-	
-			makingamount += (hourlyrate / 3600);
-			makingamountdisp = makingamount / 10000;
-			
-			second += 1;
-			if (second > 59) {
-				minute += 1;
-				second = 0;
-			};
-			if (minute > 59) {
-				hour += 1;
-				minute = 0;
-			};
-			$timeprogression.html(hour + 'h ' + minute + 'm ' + second + 's');
-			$moneyprogression.html('$' + makingamountdisp.toFixed(3));
+	if (isclockedin === true) {
+
+		makingamount += (hourlyrate / 3600);
+		makingamountdisp = makingamount / 10000;
+		
+		second += 1;
+		if (second > 59) {
+			minute += 1;
+			second = 0;
+			var parsedtotalminute = parseInt(localStorage.totalminute) + 1;
+			localStorage.totalminute = parsedtotalminute;
 		};
-	}, 1000);
+		if (minute > 59) {
+			hour += 1;
+			minute = 0;
+			
+		};
+		if (localStorage.totalminute > 59) {
+			localStorage.totalminute = 0;
+			var parsedtotalhour = parseInt(localStorage.totalhour) + 1;
+			localStorage.totalhour = parsedtotalhour;
+
+		};
+		$timeprogression.html(hour + 'h ' + minute + 'm ' + second + 's');
+		$moneyprogression.html('$' + makingamountdisp.toFixed(3));
+
+		var totaltofixed = totalsparse + makingamountdisp;
+
+		$totals.html('<h3>' + totaltofixed.toFixed(2) + ' ' + localStorage.totalhour + 'h ' + localStorage.totalminute + 'm</h3>');
+
+
+	};
+	
+}, 1);
+
+		
+
 
 
 var parsedpaycount;
 $clockout.click(function () {
-		isclockedin = false;
-		$clockout.hide();
-		$clockedin.fadeIn();
-		
-		parsedpaycount = parseInt(localStorage.getItem('paycount')) + 1;
-		localStorage.paycount = parsedpaycount;
-		console.log(localStorage.paycount);
-	
+	isclockedin = false;
+	$clockout.hide();
+	$clockedin.fadeIn();
 
-		if(typeof(Storage) !== "undefined") {
-		    localStorage.setItem('cachedPay'+localStorage.paycount, makingamountdisp.toFixed(2));
-			localStorage['cachedHours'+localStorage.paycount] = hour + 'h ' + minute + 'm';
-			
-			$('#loggedpay').prepend('<li>' + localStorage.getItem('cachedPay' + localStorage.paycount) + ' ' + localStorage['cachedHours'+localStorage.paycount] + '</li>');
-		};
-		makingamount = 0;
-		minute = 0;
-		second = 0;
-		hour = 0;
+	parsedpaycount = parseInt(localStorage.getItem('paycount')) + 1;
+	localStorage.paycount = parsedpaycount;
+    localStorage['cachedPay'+localStorage.paycount] = makingamountdisp.toFixed(2);
+	localStorage['cachedHours'+localStorage.paycount] = hour + 'h ' + minute + 'm';
+	totalsparse += parseFloat(localStorage.getItem('cachedPay'+localStorage.paycount));
+	//$totals.html(totalsparse.toFixed(2) + ' ' + localStorage.totalhour + 'h ' + localStorage.totalminute + 'm');
+
+
+	$('#loggedpay').prepend('<li class="list-group-item">' + localStorage.getItem('cachedPay' + localStorage.paycount) + ' ' + localStorage.totalhour + 'h ' + localStorage.totalminute + 'm' + '</li>');
+	localStorage.totalminute = parseInt(localStorage.totalminute) - parseInt(localStorage.totalminute);
+	localStorage.totalhour = parseInt(localStorage.totalhour) - parseInt(localStorage.totalhour);
+
+
+	
+	
+		
+
+	makingamount = 0;
+	minute = 0;
+	second = 0;
+	hour = 0;
 });
 
 
