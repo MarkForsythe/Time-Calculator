@@ -42,8 +42,12 @@
                 <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
                       <a class="navbar-brand" href="#">Work Time Tracker</a>
-                       <b id="payrate"></b>
-                       <button type="button" class="btn" id="changerate"><span class="glyphicon glyphicon-pencil"></span></button>
+                        <b id="payrate"></b>
+                        <a href="#" class="btn btn-xs btn-info" id="changerate"><span class="glyphicon glyphicon-pencil"></span></a>
+                    
+                       
+                       
+                       
                     </div>
                 </div>
             </nav>
@@ -53,6 +57,9 @@
                   <input type="text" class="setup form-control" id="paycheckamount" placeholder="Amount made after taxes">
                   <button class="btn-lg" id="enter">Enter</button>
             </div>
+
+
+           
           
 
                 
@@ -63,9 +70,11 @@
                 <button class="btn-lg" id="clockedin">Clock-in</button>
                 <button class="btn-lg" id="clockout">Clock-out</button>
 
-              <span><h4>Earnings</h4></span>
-              
-              <p id="totals"></p><button class="btn" id="clearbtn">Clear</button>
+              <div>
+                <br>
+                <h4>Earnings</h4>
+                <p id="totals"></p><button class="btn" id="clearbtn">Clear</button>
+              </div>
               <ul class="list-group" id="loggedpay"></ul>
              
         </div>
