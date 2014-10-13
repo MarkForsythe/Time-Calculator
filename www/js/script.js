@@ -99,7 +99,7 @@ if (localStorage.Payrate !== undefined) {
 	for(var incr = 1; incr <= localStorage.paycount; incr++ ) { 
 		totalsparse += parseFloat(localStorage.getItem('cachedPay'+incr));
 	};
-	$totals.html('<h3>$' + totalsparse.toFixed(2) + '     ' + localStorage.storedhours + 'h ' + localStorage.storedminutes + 'm</h3>');
+	$totals.html('<h2>$' + totalsparse.toFixed(2) + '     ' + localStorage.storedhours + 'h ' + localStorage.storedminutes + 'm</h2>');
     
     //Displaying each cachedPay and cachedHours
 	
@@ -230,7 +230,7 @@ setInterval(function () {
 		var totalsminute = parseInt(localStorage.getItem('storedminutes')) + minuteslapse;
 		
 
-		$totals.html('<h3>$' + totaltofixed.toFixed(2) + '      ' + totalshour + 'h ' + totalsminute + 'm</h3>');
+		$totals.html('<h2>$' + totaltofixed.toFixed(2) + '      ' + totalshour + 'h ' + totalsminute + 'm</h2>');
 
 
 	};
