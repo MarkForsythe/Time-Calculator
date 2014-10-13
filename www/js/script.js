@@ -221,7 +221,7 @@ setInterval(function () {
 		mkngamnt = (secondrate * tmelps) / 10000;
 
 		//Displaying time elapsed and money made
-		$timeprogression.html(hourslapse + 'h ' + minuteslapse + 'm ' + secondslapse + 's');
+		$timeprogression.html(hourslapse + 'h ' + minuteslapse + 'm ' + (secondslapse / 1000).toFixed(2) + 's');
 		$moneyprogression.html('$' + mkngamnt.toFixed(3));
 
 		//Calculating current total amount made,
@@ -230,7 +230,7 @@ setInterval(function () {
 		var totalsminute = parseInt(localStorage.getItem('storedminutes')) + minuteslapse;
 		
 
-		$totals.html('<h2>$' + totaltofixed.toFixed(2) + '      ' + totalshour + 'h ' + totalsminute + 'm</h2>');
+		$totals.html('<h2>$' + totaltofixed.toFixed(2) + ' ' + totalshour + 'h ' + totalsminute + 'm</h2>');
 
 
 	};
@@ -273,7 +273,7 @@ $clockout.click(function () {
 
 
 
-	$('#loggedpay').prepend('<li class="list-group-item">$' + localStorage.getItem('cachedPay' + localStorage.paycount) + '      ' + hourslapse + 'h ' + minuteslapse + 'm' + '</li>');
+	$('#loggedpay').prepend('<li class="list-group-item">$' + localStorage.getItem('cachedPay' + localStorage.paycount) + ' ' + hourslapse + 'h ' + minuteslapse + 'm' + '</li>');
 	makingamount = 0;
 	minute = 0;
 	second = 0;
