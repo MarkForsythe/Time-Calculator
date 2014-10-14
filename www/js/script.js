@@ -1,23 +1,31 @@
-var hourcount;
-var paycheckamount;
 var hourlyrate = localStorage.hourlyrate;
 var hourlyratedisp;
-var makingamount = 0;
-var makingamountdisp;
 
+var hourcount;
+var paycheckamount;
 var isclockedin = false;
 
-var hour = 0;
-var minute = 0;
-var second = 0;
+var totalsparse = 0;
 
+//Holds time passed during current clock in
+var secondslapse;
+var minuteslapse;
+var hourslapse;
 
+//cc: initial start time. c: current time in setInterval
+var cc;
+var c;
 
+var mkngamnt;
+var secondrate;
+var allhrs;
+var allmnts;
 
-//var worktime = [];
-//var worktimecount;
+var parsedpaycount;
 
-//var setupcheck = localStorage.setupcomplete;
+var totaltofixed;
+var totalshour;
+var totalsminute;
 
 var $moneyprogression = $('#moneyprogression');
 var $timeprogression = $('#timeprogression');
@@ -33,26 +41,16 @@ var $thisperiod = $('#thisperiod');
 var $enter = $('#enter');
 var $changerate = $('#changerate');
 var $clearbtn = $('#clearbtn');
-
 var $totals = $('#totals');
 var $setupalert = $('#setupalert');
+var $clearalert = $('#clearalert');
+var $confirmdelete = $('#confirmdelete');
 
-var totalsparse = 0;
+var $manualpayrate = $('#manualpayrate');
+var $manualalert = $('#manualalert');
 
-
-var secondslapse;
-var minuteslapse;
-var hourslapse;
-
-var cc;
-var c;
-
-var mkngamnt;
-var secondrate;
-var allhrs;
-var allmnts;
-
-
+console.log($('#manualpayrate').val());
+//Determines how much time has passed and stores them in Xlapse
 function timeDifference(d, dd) {
         var minute = 60 * 1000,
         hour = minute * 60,
@@ -64,26 +62,24 @@ function timeDifference(d, dd) {
 	    ms -= minutes * minute;
 
 
-	    //console.log(hours);
-	    //console.log(minutes);
-	    //console.log(ms);
+
 	    secondslapse = ms;
 	    minuteslapse = minutes;
 	    hourslapse = hours;
-	    // if (secondslapse > 60) {
-	    // 	secondslapse = 0;
-	    // };
 };
 
+$confirmdelete.hide();
+$clearalert.hide();
+//New user initial conditions
 $clockedin.hide();
 $clockout.hide();
 $timeprogression.hide();
 $moneyprogression.hide();
 $setupalert.html('<div class="alert alert-info" role="alert"><p class="setup" id="setup">Please get a pay-stub and enter...</p></div>');
+$manualalert.html('<span class="label label-info" role="alert">Or simply enter your pay rate:</span>');
 
-
+//Setting up initial conditions for returning user
 if (localStorage.Payrate !== undefined) {
-	//Setting up initial conditions for returning user
 	$payrate.html(localStorage.Payrate);
 	$('#enter').hide();
 	$clockedin.fadeIn();
@@ -92,6 +88,8 @@ if (localStorage.Payrate !== undefined) {
 	$setuphide3.hide();
 	$setuphide4.hide();
 	$setupalert.hide();
+	$manualalert.hide();
+	$manualpayrate.hide();
 	$timeprogression.show();
 	$moneyprogression.show();
 
@@ -99,12 +97,11 @@ if (localStorage.Payrate !== undefined) {
 	for(var incr = 1; incr <= localStorage.paycount; incr++ ) { 
 		totalsparse += parseFloat(localStorage.getItem('cachedPay'+incr));
 	};
-	$totals.html('<h2>$' + totalsparse.toFixed(2) + '     ' + localStorage.storedhours + 'h ' + localStorage.storedminutes + 'm</h2>');
+	$totals.html('<h2>$' + totalsparse.toFixed(2) + ' - 0' + 'h ' + '0' + 'm</h2>');
     
     //Displaying each cachedPay and cachedHours
-	
 	for(var incr = 1; incr <= localStorage.paycount; incr++ ) { 
-		$('#loggedpay').prepend('<li class="list-group-item">$' + localStorage.getItem('cachedPay'+incr) + '     ' + localStorage['cachedHours'+incr] + '</li>');
+		$('#loggedpay').prepend('<tr><td>' + localStorage.getItem('cachedDate' + localStorage.paycount) + '</td><td>$' + localStorage.getItem('cachedPay'+incr) + '</td><td>' + localStorage['cachedHours'+incr] + '</td></tr>');
 	};
 }
 else {
@@ -115,7 +112,7 @@ else {
 //Changing payrate button action
 $changerate.click(function () {
 	if (isclockedin === true) {
-		$setupalert.html('<div class="alert alert-danger" role="alert"><p class="setup" id="setup">Please clockout first</p></div>');
+		$setupalert.html('<div class="alert alert-danger" role="alert"><p class="setup" id="setup">Please clock out first.</p></div>');
 		$setupalert.show().delay(2000).fadeOut();
 		
 		
@@ -123,7 +120,8 @@ $changerate.click(function () {
 	}
 	else {
 		$setupalert.html('<div class="alert alert-info" role="alert"><p class="setup" id="setup">Please get a pay-stub and enter...</p></div>');
-		//$setupalert.hide();
+		$manualalert.show();
+		$manualpayrate.show();
 		$('#enter').show();
 		$setuphide1.fadeIn();
 		$setuphide2.fadeIn();
@@ -140,40 +138,49 @@ $changerate.click(function () {
 	
 });
 
-//Reseting all cached data except your payrate
+//Button for reseting all cached data, except your payrate
 $clearbtn.click(function () {
-	$('#loggedpay').empty();
-	for(var incr = 1; incr <= localStorage.paycount; incr++ ) { 
-		localStorage.removeItem('cachedPay'+incr);
-		localStorage.removeItem('cachedHours'+incr);
-	};
-	localStorage.paycount = 0;
-	totalsparse = 0;
-	localStorage.ttlhr = 0;
-	localStorage.ttlmnt = 0;
-	$totals.html('$' + totalsparse + '      ' + localStorage.ttlhr + 'h ' + localStorage.ttlmnt + 'm');
+	$confirmdelete.fadeIn();
+
+	$clearbtn.hide();
+
+	$confirmdelete.click(function () {
+		$confirmdelete.hide();
+		$clearbtn.fadeIn();
+
+		$('#loggedpay').empty();
+		for(var incr = 1; incr <= localStorage.paycount; incr++ ) { 
+			localStorage.removeItem('cachedPay'+incr);
+			localStorage.removeItem('cachedHours'+incr);
+		};
+		localStorage.storedminutes = 0;
+		localStorage.storedhours = 0;
+		localStorage.paycount = 0;
+		totalsparse = 0;
+		localStorage.ttlhr = 0;
+		localStorage.ttlmnt = 0;
+		$totals.html('<h2>$0.00 - 0h 0m</h2>');
+		
+
+
+	});
+	
+
 
 });
 
 
+//Setup function for after pay rate is defined
+var completesetup = function () {
 
-
-$enter.click(function () {
-	//Getting user's input
-	hourcount = $('#hourcount').val();
-	paycheckamount = $('#paycheckamount').val();
-
-	//Calculating their hourly rate and multiplying it for precision
-	hourlyrate = (paycheckamount / hourcount) * 10000;
+	//Calculating user's hourly rate, then multiplying it for precision
+	
 	hourlyratedisp = '$' + (hourlyrate / 10000).toFixed(2) + '/hr';
-
-
 
 	//Saving Payrate for display and hourlyrate for use in javascript
 	localStorage.Payrate = hourlyratedisp;
 	localStorage.hourlyrate = hourlyrate;
 	$payrate.html(localStorage.Payrate);
-
 	localStorage.setupcomplete = true;
 
 	//Hiding and revealing html elements
@@ -183,17 +190,31 @@ $enter.click(function () {
 	$setuphide3.hide();
 	$setuphide4.hide();	
 	$setupalert.hide();
+	$manualalert.hide();
+	$manualpayrate.hide();
 
 	$payrate.fadeIn();
 	$clockedin.fadeIn();
 	$changerate.show();
-	$timeprogression.show();
-	$moneyprogression.show();
-
+	$timeprogression.fadeIn();
+	$moneyprogression.fadeIn();
 	//Setting stored minutes/hours to avoid initial NaN on signup
-
 	localStorage.storedhours = '0';
 	localStorage.storedminutes = '0';
+};
+$enter.click(function () {
+	if ($('#manualpayrate').val().length != 0) {
+		hourlyrate = $manualpayrate.val() * 10000;
+		completesetup();
+
+
+	}
+	else {
+		hourlyrate = ($('#paycheckamount').val() / $('#hourcount').val()) * 10000;
+		completesetup();
+
+	};
+
 });
 
 //Setting isclockedin (starting the setInterval), changing toggle button, and creating the initial date time to count from
@@ -202,6 +223,7 @@ $clockedin.click(function () {
 	$clockedin.hide();
 	$clockout.fadeIn();
 	cc = new Date();
+	localStorage.cc = cc;
 });
 
 
@@ -221,16 +243,16 @@ setInterval(function () {
 		mkngamnt = (secondrate * tmelps) / 10000;
 
 		//Displaying time elapsed and money made
-		$timeprogression.html(hourslapse + 'h ' + minuteslapse + 'm ' + (secondslapse / 1000).toFixed(2) + 's');
+		$timeprogression.html(hourslapse + 'h ' + minuteslapse + 'm ' + (secondslapse / 1000).toFixed(0) + 's');
 		$moneyprogression.html('$' + mkngamnt.toFixed(3));
 
 		//Calculating current total amount made,
-		var totaltofixed = totalsparse + mkngamnt;
-		var totalshour = parseInt(localStorage.getItem('storedhours')) + hourslapse;
-		var totalsminute = parseInt(localStorage.getItem('storedminutes')) + minuteslapse;
+		totaltofixed = totalsparse + mkngamnt;
+		totalshour = parseInt(localStorage.getItem('storedhours')) + hourslapse;
+		totalsminute = parseInt(localStorage.getItem('storedminutes')) + minuteslapse;
 		
 
-		$totals.html('<h2>$' + totaltofixed.toFixed(2) + ' ' + totalshour + 'h ' + totalsminute + 'm</h2>');
+		$totals.html('<h2>$' + totaltofixed.toFixed(2) + ' - ' + totalshour + 'h ' + totalsminute + 'm</h2>');
 
 
 	};
@@ -238,49 +260,39 @@ setInterval(function () {
 }, 10);
 
 		
-
-
-
-var parsedpaycount;
 $clockout.click(function () {
 	isclockedin = false;
 	$clockout.hide();
 	$clockedin.fadeIn();
 
-	console.log(localStorage.storedminutes);
 	allhrs = parseInt(localStorage.getItem('storedhours'));
 	allmnts = parseInt(localStorage.getItem('storedminutes'));
 	allhrs += hourslapse;
 	allmnts += minuteslapse;
-		//console.log(allmnts);
-		//localStorage.storedminutes = allmnts;
+
 	localStorage.storedhours = allhrs;
 	localStorage.storedminutes = allmnts;
 
-
-
+	//Parsing pay count, adding one and saving
 	parsedpaycount = parseInt(localStorage.getItem('paycount')) + 1;
 	localStorage.paycount = parsedpaycount;
 
-
+	//Setting cached amounts for display
     localStorage['cachedPay'+localStorage.paycount] = mkngamnt.toFixed(2);
 	localStorage['cachedHours'+localStorage.paycount] = hourslapse + 'h ' + minuteslapse + 'm';
+	var month = (new Date).getMonth() + 1; //months from 1-12
+	var day = (new Date).getDate();
+	localStorage['cachedDate'+localStorage.paycount] = month + "/" + day;
 
-
-	
-
+	//Adding current cachedPay to total
 	totalsparse += parseFloat(localStorage.getItem('cachedPay'+localStorage.paycount));
 
 
 
-	$('#loggedpay').prepend('<li class="list-group-item">$' + localStorage.getItem('cachedPay' + localStorage.paycount) + ' ' + hourslapse + 'h ' + minuteslapse + 'm' + '</li>');
-	makingamount = 0;
+	$('#loggedpay').prepend('<tr><td>' + localStorage.getItem('cachedDate' + localStorage.paycount) + '</td><td>$' + localStorage.getItem('cachedPay' + localStorage.paycount) + '</td><td>' + hourslapse + 'h ' + minuteslapse + 'm' + '</td></tr>');
 	minute = 0;
 	second = 0;
 	hour = 0;
-
-	var local = new Date();
-	//datetime = local.getHours() + ":" + local.getMinutes() + ":" + local.getSeconds();
 });
 
 

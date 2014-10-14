@@ -30,12 +30,9 @@ h1 {
     padding:0px;
     text-align:center;
 }
-
-#payrate {
-    font-size: 22px;
-    margin-right: -30px;
-
-}
+ #payrate {
+    font-size: 17px;
+ }
 
 #moneyprogression {
     font-size: 70px;
@@ -45,9 +42,7 @@ h1 {
     font-size: 40px;
 }
 
-#changerate {
-    float: right;
-}
+
 
 
 

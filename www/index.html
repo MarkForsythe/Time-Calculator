@@ -38,48 +38,47 @@
     <body>
         <div class="app">
             <nav class="navbar navbar-default" role="navigation">
-              <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                    <div class="navbar-header">
-                      <a class="navbar-brand" href="#">Work Time Tracker</a>
-                 
-                      <b id="payrate"></b>
-                      <a href="#" class="btn btn-xs btn-info" id="changerate"><span class="glyphicon glyphicon-pencil"></span></a>
-               
+              <div class="navbar-header">
+                   <a class="navbar-brand" href="#">Work Time Tracker</a>
+                
+                    <b id="payrate"></b>
+                    <a href="#" class="btn btn-xs btn-info" id="changerate"><span class="glyphicon glyphicon-pencil"></span></a>
+                
+                
                   
-                       
-                       
-                       
-                    </div>
                 </div>
             </nav>
-            <div id="setupalert"></div>
-            <div class="input-group input-group-lg">
-                  <input type="text" class="setup form-control" id="hourcount" placeholder="Hours recieved">
-                  <input type="text" class="setup form-control" id="paycheckamount" placeholder="Amount made after taxes">
-                  <button class="btn-lg" id="enter">Enter</button>
-            </div>
-
-
-           
-          
-
+              <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
                 
 
-                <p id="moneyprogression">$0.000</p>
-                
-                <p id="timeprogression"></p>
-                <button class="btn-lg" id="clockedin">Clock-in</button>
-                <button class="btn-lg" id="clockout">Clock-out</button>
+                    
+                <div id="setupalert"></div>
+                <div class="input-group input-group-lg">
+                      <input type="text" class="setup form-control" id="hourcount" placeholder="Hours recieved (eg., 34.45)">
+                      <input type="text" class="setup form-control" id="paycheckamount" placeholder="Amount made after taxes (eg., 296.64)">
+                      <p id="manualalert"></p>
+                      <input type="text" class="setup form-control" id="manualpayrate" placeholder="e.g., 8.35">
 
-              <div>
-                <br>
-                <h4>Earnings</h4>
-                <p id="totals"></p><button class="btn" id="clearbtn">Clear</button>
-              </div>
-              <ul class="list-group" id="loggedpay"></ul>
-             
-        </div>
+                      <button class="btn-lg" id="enter">Enter</button>
+                </div>
+
+                  <p id="moneyprogression">$0.000</p> 
+                  <p id="timeprogression"></p>
+                  <button class="btn-lg" id="clockedin">Clock-in</button>
+                  <button class="btn-lg" id="clockout">Clock-out</button>
+
+                  <div>
+                    <br>
+                    <h4>Earnings</h4>
+                    <p id="totals"></p>
+                  </div>
+                  <table class="table" id="loggedpay"></table>
+
+                  <button class="btn" id="clearbtn">Clear</button>
+                  <button class="btn" id="confirmdelete">Are you sure?</button>
+                </div>
+            
         <script type="text/javascript" src="js/index.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="./js/script.js"></script>

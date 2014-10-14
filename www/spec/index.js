@@ -58,10 +58,10 @@ describe('app', function() {
             expect(displayStyle).toEqual('none');
         });
 
-        it('should show the received element', function() {
-            app.receivedEvent('deviceready');
-            var displayStyle = helper.getComputedStyle('#deviceready .received', 'display');
-            expect(displayStyle).toEqual('block');
-        });
+        // it('should show the received element', function() {
+        //     app.receivedEvent('deviceready');
+        //     var displayStyle = helper.getComputedStyle('#deviceready .received', 'display');
+        //     expect(displayStyle).toEqual('block');
+        // });
     });
 });
