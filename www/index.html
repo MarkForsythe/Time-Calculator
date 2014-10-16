@@ -41,7 +41,7 @@
               <div class="navbar-header">
                    <a class="navbar-brand" href="#">Work Time Tracker</a>
                 
-                    <b class="btn-group" id="payrate"></b>
+                    <b id="payrate"></b>
                     <a href="#" class="btn btn-xs btn-info" id="changerate"><span class="glyphicon glyphicon-pencil"></span></a>
                 
                 
@@ -73,9 +73,14 @@
                     <h4>Earnings</h4>
                     <p id="totals"></p>
                   </div>
+                  <button class="btn" id="addButton">+</button>
+                  <input type="text" class="setup form-control" id="addDate" placeholder="Note/date">
+                  <input type="text" class="setup form-control" id="addHours" placeholder="Hours">
+                   <input type="text" class="setup form-control" id="addMinutes" placeholder="Minutes">
+                   <button class="btn" id="addConfirm">Add</button>
                   <table class="table" id="loggedpay"></table>
 
-                  <button class="btn" id="clearbtn">Clear</button>
+                  <button class="btn" id="clearbtn">Clear log</button>
                   <button class="btn" id="confirmdelete">Are you sure?</button>
                 </div>
             
