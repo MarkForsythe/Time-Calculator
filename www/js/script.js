@@ -321,7 +321,7 @@ var savedid2;
  		savedid2 = $(this).attr('id');
  		console.log(savedid2);
  		if (savedid === savedid2) {
- 			
+
  			$(this).closest('tr').fadeOut('fast');
 
  			localStorage.removeItem('cachedDate'+savedid);
@@ -367,7 +367,7 @@ var savedid2;
  	else {
  		savedid = $(this).attr('id');
  		console.log(savedid);
- 		$(this).replaceWith('<button id="' + savedid + '"class="btn delbtn"><span class="glyphicon glyphicon-search"></span></button>');
+ 		$(this).replaceWith('<button id="' + savedid + '"class="btn delbtn"><span class="glyphicon glyphicon-remove-circle"></span></button>');
 	 	warned = true;
 	 	setTimeout(function () {
 			$('#'+savedid).replaceWith('<button id="' + savedid + '"class="btn delbtn"><span class="glyphicon glyphicon-trash"></span></button>');
