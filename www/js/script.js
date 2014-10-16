@@ -1,6 +1,6 @@
 var hourlyrate = localStorage.hourlyrate;
 var hourlyratedisp;
-
+//localStorage.delnum = 0;
 var hourcount;
 var paycheckamount;
 var isclockedin = false;
@@ -97,11 +97,14 @@ if (localStorage.Payrate !== undefined) {
 	for(var incr = 1; incr <= localStorage.paycount; incr++ ) { 
 		totalsparse += parseFloat(localStorage.getItem('cachedPay'+incr));
 	};
-	$totals.html('<h2>$' + totalsparse.toFixed(2) + ' - 0' + 'h ' + '0' + 'm</h2>');
+	$totals.html('<h2>$' + totalsparse.toFixed(2) + ' - ' + localStorage.storedhours + 'h ' + localStorage.storedminutes + 'm</h2>');
     
     //Displaying each cachedPay and cachedHours
 	for(var incr = 1; incr <= localStorage.paycount; incr++ ) { 
-		$('#loggedpay').prepend('<tr><td>' + localStorage.getItem('cachedDate' + localStorage.paycount) + '</td><td>$' + localStorage.getItem('cachedPay'+incr) + '</td><td>' + localStorage['cachedHours'+incr] + '</td></tr>');
+		if (localStorage.getItem('cachedHours' + incr) != undefined) {
+			$('#loggedpay').prepend('<tr><td>' + localStorage.getItem('cachedDate' + incr) + '</td><td>$' + localStorage.getItem('cachedPay'+incr) + '</td><td>' + localStorage['cachedHours'+incr] + '<button id="' + incr+ '"class="btn delbtn"><span class="glyphicon glyphicon-trash"></span></button></td></tr>');
+		};
+		
 	};
 }
 else {
@@ -143,6 +146,12 @@ $clearbtn.click(function () {
 	$confirmdelete.fadeIn();
 
 	$clearbtn.hide();
+	setTimeout(function () {
+		$confirmdelete.hide();
+		$clearbtn.fadeIn();
+
+	}, 4000);
+
 
 	$confirmdelete.click(function () {
 		$confirmdelete.hide();
@@ -259,7 +268,7 @@ setInterval(function () {
 	
 }, 10);
 
-		
+
 $clockout.click(function () {
 	isclockedin = false;
 	$clockout.hide();
@@ -269,6 +278,10 @@ $clockout.click(function () {
 	allmnts = parseInt(localStorage.getItem('storedminutes'));
 	allhrs += hourslapse;
 	allmnts += minuteslapse;
+
+	localStorage['rmvhours' + localStorage.paycount] = hourslapse;
+	localStorage['rmvminutes' + localStorage.paycount] = minuteslapse;
+	console.log("EHEM" + localStorage['rmvminutes' + localStorage.paycount]);
 
 	localStorage.storedhours = allhrs;
 	localStorage.storedminutes = allmnts;
@@ -288,13 +301,87 @@ $clockout.click(function () {
 	totalsparse += parseFloat(localStorage.getItem('cachedPay'+localStorage.paycount));
 
 
-
-	$('#loggedpay').prepend('<tr><td>' + localStorage.getItem('cachedDate' + localStorage.paycount) + '</td><td>$' + localStorage.getItem('cachedPay' + localStorage.paycount) + '</td><td>' + hourslapse + 'h ' + minuteslapse + 'm' + '</td></tr>');
+	$('#loggedpay').prepend('<tr><td>' + localStorage.getItem('cachedDate' + localStorage.paycount) + '</td><td>$' + localStorage.getItem('cachedPay' + localStorage.paycount) + '</td><td>' + hourslapse + 'h ' + minuteslapse + 'm ' + '<button id="' + localStorage.paycount + '" class="btn delbtn"><span class="glyphicon glyphicon-trash"></span></button></td></tr>');
+	//var parsedelnum = parseInt(localStorage.getItem('delnum')) + 1;
+	//localStorage.delnum = parsedelnum;
 	minute = 0;
 	second = 0;
 	hour = 0;
 });
 
+var warned = false;
+var savedid;
+var savedid2;
+
+ $(document).on('click', 'button.delbtn', function () {
+
+ 	//var savedid2 = $(this).attr('id');
+
+ 	if (warned === true) {
+ 		savedid2 = $(this).attr('id');
+ 		console.log(savedid2);
+ 		if (savedid === savedid2) {
+ 			
+ 			$(this).closest('tr').fadeOut('fast');
+
+ 			localStorage.removeItem('cachedDate'+savedid);
+			localStorage.removeItem('cachedHours'+savedid);
+			localStorage.removeItem('cachedDate'+savedid);
+ 			localStorage['cachedPay'+savedid] = 0;
+
+ 			savedid -= 1;
+ 			var rmvhours = parseInt(localStorage.getItem('rmvhours'+savedid));
+ 			var rmvminutes = parseInt(localStorage.getItem('rmvminutes'+savedid));
+
+ 			var parsehoursforrmv = parseInt(localStorage.storedhours);
+ 			parsehoursforrmv -= rmvhours;
+ 			localStorage.storedhours = parsehoursforrmv;
+
+ 			var parseminutesforrmv = parseInt(localStorage.storedminutes);
+ 			parseminutesforrmv -= rmvminutes;
+ 			localStorage.storedminutes = parseminutesforrmv;
+ 			
+ 			totalsparse = 0;
+ 			for(var incr = 1; incr <= localStorage.paycount; incr++ ) { 
+				totalsparse += parseFloat(localStorage.getItem('cachedPay'+incr));
+			};
+ 			$totals.html('<h2>$' + totalsparse.toFixed(2) + ' - ' + localStorage.storedhours + 'h ' + localStorage.storedminutes + 'm</h2>');
+
+
+	 		warned = false;
+	 		savedid = undefined;
+ 			savedid2 = undefined;
+
+ 		}
+ 		else {
+ 			//$(this).replaceWith('<button id="' + savedid2 + '"class="btn delbtn"><span class="glyphicon glyphicon-search"></span></button>');
+ 			$('#'+savedid).replaceWith('<button id="' + savedid + '"class="btn delbtn"><span class="glyphicon glyphicon-trash"></span></button>');
+ 			warned = false;
+ 			savedid = undefined;
+ 			savedid2 = undefined;
+
+
+
+ 		};
+ 	}
+ 	else {
+ 		savedid = $(this).attr('id');
+ 		console.log(savedid);
+ 		$(this).replaceWith('<button id="' + savedid + '"class="btn delbtn"><span class="glyphicon glyphicon-search"></span></button>');
+	 	warned = true;
+	 	setTimeout(function () {
+			$('#'+savedid).replaceWith('<button id="' + savedid + '"class="btn delbtn"><span class="glyphicon glyphicon-trash"></span></button>');
+			savedid = undefined;
+ 			savedid2 = undefined;
+	}, 3000);
+ 	};
+
+ 	
+ 	
+
+   // $(this).closest('tr').remove();
+    // return false;
+ });
 
 
 

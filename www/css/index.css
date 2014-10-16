@@ -31,7 +31,7 @@ h1 {
     text-align:center;
 }
  #payrate {
-    font-size: 17px;
+    font-size: 19px;
  }
 
 #moneyprogression {
@@ -40,6 +40,10 @@ h1 {
 
 #timeprogression {
     font-size: 40px;
+}
+
+td {
+    font-size: 18px;
 }
 
 
