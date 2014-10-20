@@ -73,10 +73,14 @@
                     <h4>Earnings</h4>
                     <p id="totals"></p>
                   </div>
-                  <button class="btn" id="addButton">+</button>
+
+                  <button class="btn" id="addButton"><span class="glyphicon glyphicon-plus"></span></button>
+                  <div id="addAlert"></div>
                   <input type="text" class="setup form-control" id="addDate" placeholder="Note/date">
                   <input type="text" class="setup form-control" id="addHours" placeholder="Hours">
                    <input type="text" class="setup form-control" id="addMinutes" placeholder="Minutes">
+                   <p id="optionalamountalert"><span class="label label-info" role="alert">Optional:</span></p>
+                   <input type="text" class="setup form-control" id="addMoney" placeholder="Enter amount earned manually">
                    <button class="btn" id="addConfirm">Add</button>
                   <table class="table" id="loggedpay"></table>
 

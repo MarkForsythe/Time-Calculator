@@ -45,6 +45,26 @@ h1 {
 td {
     font-size: 18px;
 }
+#addHours, #addMinutes {
+    width: 49%;
+}
+#addMinutes {
+    float: right;
+    margin-top: -34px;
+}
+#addButton {
+ 
+    margin-bottom: 5px;
+}
+#addConfirm {
+ 
+    margin: 5px;
+}
+
+#optionalamountalert {
+    margin-top: 10px;
+
+}
 
 
 
