@@ -49,10 +49,12 @@ var $confirmdelete = $('#confirmdelete');
 var $manualpayrate = $('#manualpayrate');
 var $manualalert = $('#manualalert');
 var $optionalamountalert = $('#optionalamountalert');
+var $addButtonMinus = $('#addButtonMinus');
 
 
 //$('#addAlert').html('<div class="alert alert-danger" role="alert"><p class="setup" id="setup">Please enter less than 60 minutes.</p></div>');
 $('#addAlert').hide();
+
 
 console.log($('#manualpayrate').val());
 //Determines how much time has passed and stores them in Xlapse
@@ -81,9 +83,11 @@ $clockout.hide();
 $timeprogression.hide();
 $moneyprogression.hide();
 $optionalamountalert.hide();
+$changerate.hide();
 $setupalert.html('<div class="alert alert-info" role="alert"><p class="setup" id="setup">Please get a pay-stub and enter...</p></div>');
 $manualalert.html('<span class="label label-info" role="alert">Or simply enter your pay rate:</span>');
 $('#addMoney').hide();
+$addButtonMinus.hide();
 
 //Setting up initial conditions for returning user
 if (localStorage.Payrate !== undefined) {
@@ -99,6 +103,7 @@ if (localStorage.Payrate !== undefined) {
 	$manualpayrate.hide();
 	$timeprogression.show();
 	$moneyprogression.show();
+	$changerate.show();
 
 	//Adding up all the cachedPayX's, then displaying it
 	for(var incr = 1; incr <= localStorage.paycount; incr++ ) { 
@@ -295,16 +300,18 @@ $clockout.click(function () {
 	allhrs += hourslapse;
 	allmnts += minuteslapse;
 
-	localStorage['rmvhours' + localStorage.paycount] = hourslapse;
-	localStorage['rmvminutes' + localStorage.paycount] = minuteslapse;
-	console.log("EHEM" + localStorage['rmvminutes' + localStorage.paycount]);
-
 	localStorage.storedhours = allhrs;
 	localStorage.storedminutes = allmnts;
+
+
 
 	//Parsing pay count, adding one and saving
 	parsedpaycount = parseInt(localStorage.getItem('paycount')) + 1;
 	localStorage.paycount = parsedpaycount;
+
+	localStorage['rmvhours' + localStorage.paycount] = hourslapse;
+	localStorage['rmvminutes' + localStorage.paycount] = minuteslapse;
+	console.log("EHEM" + localStorage['rmvminutes' + localStorage.paycount]);
 
 	//Setting cached amounts for display
     localStorage['cachedPay'+localStorage.paycount] = mkngamnt.toFixed(2);
@@ -325,10 +332,16 @@ $clockout.click(function () {
 	hour = 0;
 });
 
-$('#addDate').hide();
-$('#addHours').hide();
-$('#addMinutes').hide();
-$('#addConfirm').hide();
+$addDate = $('#addDate');
+$addHours = $('#addHours');
+$addMinutes = $('#addMinutes');
+$addConfirm = $('#addConfirm');
+$addMoney = $('#addMoney');
+
+$addDate.hide();
+$addHours.hide();
+$addMinutes.hide();
+$addConfirm.hide();
 
 
 var addDate;
@@ -337,33 +350,38 @@ var addMinutes = 0;
 
 
 $addButton = $('#addButton');
-$addButton.click(function () {
-	var clicks = $(this).data('clicks');
-	if (clicks) {
-		$addButton.html('<span class="glyphicon glyphicon-minus">');
+$(document).ready(function () {
 
-		$('#addDate').show();
-		$('#addHours').show();
-		$('#addMinutes').show();
-		$('#addConfirm').show();
-		$('#addMoney').show();
+	$addButton.click(function () {
+	//var clicks = $(this).data('clicks');
+	//if (clicks) {
+		//$addButton.html('<span class="glyphicon glyphicon-minus">');
+		$addButton.hide();
+		$addDate.show();
+		$addHours.show();
+		$addMinutes.show();
+		$addConfirm.show();
+		$addMoney.show();
 		$optionalamountalert.show();
+	
+		$addButtonMinus.show();
 		
 
+		$addButtonMinus.click(function () {
+				$addDate.hide();
+				$addHours.hide();
+				$addMinutes.hide();
+				$addConfirm.hide();
+				$addMoney.hide();
+				$optionalamountalert.hide();
+				$addButtonMinus.hide();
+				$addButton.show();
+		});
 
+        var addAmount = 0;
 		$addConfirm = $('#addConfirm');
-		var addAmount = 0;
 
 		$addConfirm.unbind().click(function () {
-
-			$addButton.click(function () {
-				$('#addDate').hide();
-				$('#addHours').hide();
-				$('#addMinutes').hide();
-				$('#addConfirm').hide();
-				$('#addMoney').hide();
-				$optionalamountalert.hide();
-			});
 
 				addDate = $('#addDate').val();
 				addHours = $('#addHours').val();
@@ -436,35 +454,41 @@ $addButton.click(function () {
 
 					$('#loggedpay').prepend('<tr><td>' + localStorage.getItem('cachedDate' + localStorage.paycount) + '</td><td>$' + localStorage.getItem('cachedPay' + localStorage.paycount) + '</td><td>' + addHours + 'h ' + addMinutes + 'm ' + '<button id="' + localStorage.paycount + '" class="btn delbtn"><span class="glyphicon glyphicon-trash"></span></button></td></tr>');
 
-					$('#addDate').hide();
-					$('#addHours').hide();
-					$('#addMinutes').hide();
-					$('#addConfirm').hide();
-					$('#addMoney').hide();
+					$addDate.hide();
+					$addHours.hide();
+					$addMinutes.hide();
+					$addConfirm.hide();
+					$addMoney.hide();
 					$optionalamountalert.hide();
-					$('#addButton').data("clicks");
-					$addButton.html('<span class="glyphicon glyphicon-plus">');
+					$addButtonMinus.hide();
+					$addButton.show();
+					//$addButton.html('<span class="glyphicon glyphicon-plus">');
 					$totals.html('<h2>$' + totalsparse.toFixed(2) + ' - ' + localStorage.storedhours + 'h ' + localStorage.storedminutes + 'm</h2>');
 
-			} 
-			else {
-				$('#addAlert').html('<div class="alert alert-danger" role="alert"><p class="setup" id="setup">Enter minutes 0-60, and hours 0+.</p></div>');
-                $('#addAlert').show().delay(3000).fadeOut();
-			};
+			//} 
+			//else {
+			//	$('#addAlert').html('<div class="alert alert-danger" role="alert"><p class="setup" id="setup">Enter minutes 0-60, and hours 0+.</p></div>');
+            //   $('#addAlert').show().delay(3000).fadeOut();
+				};
 		});
 
-	}
-	else {
-		$('#addDate').hide();
-		$('#addHours').hide();
-		$('#addMinutes').hide();
-		$('#addConfirm').hide();
-		$('#addMoney').hide();
-		$optionalamountalert.hide();
-		$addButton.html('<span class="glyphicon glyphicon-plus">');
+	});
 
-	};
-	$(this).data("clicks", !clicks);
+
+
+	//}
+	//else {
+
+		// $('#addDate').hide();
+		// $('#addHours').hide();
+		// $('#addMinutes').hide();
+		// $('#addConfirm').hide();
+		// $('#addMoney').hide();
+		// $optionalamountalert.hide();
+		// $addButton.html('<span class="glyphicon glyphicon-plus">');
+
+	//};
+	//$(this).data("clicks", !clicks);
 
 
 });
@@ -514,6 +538,8 @@ var savedid2;
  				var addanhour = parseInt(localStorage.storedhours);
  				addanhour -= 1;
  				checkunderminutes += 60;
+ 				console.log("TEST" + checkunderminutes);
+ 				console.log("TEST" + addanhour);
 
  				localStorage.storedhours = addanhour;
  				localStorage.storedminutes = checkunderminutes;
