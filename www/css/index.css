@@ -52,10 +52,11 @@ td {
     float: right;
     margin-top: -34px;
 }
-#addButton {
+#addButton, #addButtonMinus {
  
     margin-bottom: 5px;
 }
+
 #addConfirm {
  
     margin: 5px;
@@ -70,6 +71,9 @@ td {
     display:block;
 }
 
+.delbtn {
+    float: right;
+}
 
 
 
