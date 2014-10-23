@@ -357,12 +357,7 @@ setInterval(function () {
 
 		// };
 
-      
-
-
-
-	console.log("T"+localStorage.storedminutes);
-		$totals.html('<h2>$' + totaltofixed.toFixed(2) + ' - ' + t_hour + 'h' + dispmins + 'm</h2>');
+		$totals.html('<h2>$' + totaltofixed.toFixed(2) + ' - ' + t_hour + 'h ' + dispmins + 'm</h2>');
 	};
 }, 50);
 
