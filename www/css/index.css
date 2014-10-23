@@ -67,8 +67,16 @@ td {
 
 }
 
+#manualalert {
+    display: inline-block;
+}
+
 .delbtn {
     float: right;
+}
+
+#enter {
+    display: inline-block;
 }
 
 
