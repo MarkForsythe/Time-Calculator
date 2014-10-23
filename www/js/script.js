@@ -266,16 +266,29 @@ $clockedin.click(function () {
 });
 
 //Looping code while clocked in
-	var cnt = 0;
-	var actvSecondHour = false;
-	var dispmins = 0;
-	var z = 0;
-	var t_hour = parseInt(localStorage.getItem('storedhours'));
-	var firsthour = false;
+var runonce = true;
+var cnt = 0;
+var cnt2 = 0;
+var actvSecondHour = false;
+var dispmins = 0;
+		//var z = 0;
+var t_hour;
+var firsthouradd = false;
+var t_min;
 		
+
+
+
 
 setInterval(function () {
 	if (isclockedin === true) {
+		if (runonce === true) {
+			t_hour = parseInt(localStorage.getItem('storedhours'));
+			t_min = parseInt(localStorage.getItem('storedminutes'));
+			console.log("ZZZZZZZZZZZZZZZZ");
+			runonce = false;
+		}
+	
 
 		//Getting current time
 		c = new Date();
@@ -298,30 +311,33 @@ setInterval(function () {
 		totaltofixed = totalsparse + mkngamnt;
 
         // Ensuring that if more than an hour has lapsed, an hour will be added and 60 minutes will be subtracted from storedminutes
-		var t_min = parseInt(localStorage.getItem('storedminutes')) + cnt;
 
-		if (cnt != minuteslapse && firsthour === false) {
+        //Keeping count of total minutes and minuteslapse count
+		if (cnt != minuteslapse && firsthouradd === false) {
 			cnt += 1;
+			t_min += 1;
 		};
-
+        //Making minutes display as t_min before fist hour is up
         if (t_min < 60) {
         	dispmins = t_min;
         };
 
 		if (t_min >= 60) {
 			actvSecondHour = true;
-			t_min = 0;
 		};
 
 		if (actvSecondHour === true) {
-			if (firsthour === false) {
+			dispmins = cnt2;
+			if (firsthouradd === false) {
 				t_hour += 1;
-				firsthour = true;
+				firsthouradd = true;
 			};
 			
 			if (cnt != minuteslapse) {
 				cnt2 += 1;
 				cnt += 1;
+				console.log("addmin")
+
 			};
 			
 			if (cnt2 >= 60) {
@@ -329,7 +345,7 @@ setInterval(function () {
 				cnt2 = 0;
 
 			};
-			dispmins = cnt2;
+
 		};
 
 		// console.log("FIX" + fixminutesdef);
@@ -364,9 +380,9 @@ setInterval(function () {
 //Clock out action
 $clockout.click(function () {
 
+	actvSecondHour = false;
+	firsthouradd = true;
 	runonce = true;
-	bool = false;
-	firsthour = true;
 
 	isclockedin = false;
 	$clockout.hide();
