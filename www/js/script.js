@@ -101,7 +101,7 @@ $moneyprogression.hide();
 $optionalamountalert.hide();
 $changerate.hide();
 $setupalert.html('<div class="alert alert-info" role="alert"><p class="setup" id="setup">Please get a pay-stub and enter...</p></div>');
-$manualalert.html('<span class="label label-info" role="alert">Or simply enter your pay rate:</span>');
+$manualalert.html('<span class="label label-info" role="alert">Or simply enter hourly rate manually:</span>');
 $('#addMoney').hide();
 $('#addAlert').hide();
 $addButtonMinus.hide();
@@ -482,8 +482,8 @@ $(document).ready(function () {
 					var addAmountfixed = addAmount / 100000;
 
 					localStorage['cachedHours'+localStorage.paycount] = addHours + 'h ' + addMinutes + 'm';
-					if ($('#addMoney').val().length != 0 && $('#addMoney') < 0) {
-						localStorage['cachedPay'+localStorage.paycount] = $('#addMoney').val().toFixed(2);
+					if ($('#addMoney').val().length != 0 && $('#addMoney').val() > 0) {
+						localStorage['cachedPay'+localStorage.paycount] = $('#addMoney').val();
 					}
 					else {
 						localStorage['cachedPay'+localStorage.paycount] = addAmountfixed.toFixed(2);

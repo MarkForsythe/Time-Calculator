@@ -57,8 +57,8 @@
                 <div class="input-group input-group-lg">
                       <input type="text" class="setup form-control" id="hourcount" placeholder="Hours recieved (eg., 34.45)">
                       <input type="text" class="setup form-control" id="paycheckamount" placeholder="Amount made after taxes (eg., 296.64)">
-                      <p id="manualalert"></p>
-                      <input type="text" class="setup form-control" id="manualpayrate" placeholder="e.g., 8.35">
+                      <div id="manualalert"></div>
+                      <input type="text" class="setup form-control" id="manualpayrate" placeholder="Enter hourly rate manually (e.g., 8.35)">
 
                       <button class="btn-lg" id="enter">Enter</button>
                 </div>
@@ -77,11 +77,11 @@
                   <button class="btn" id="addButton"><span class="glyphicon glyphicon-plus"></span></button>
                   <button class="btn" id="addButtonMinus"><span class="glyphicon glyphicon-minus"></span></button>
                   <div id="addAlert"></div>
-                  <input type="text" class="setup form-control" id="addDate" placeholder="Note/date">
                   <input type="text" class="setup form-control" id="addHours" placeholder="Hours">
                    <input type="text" class="setup form-control" id="addMinutes" placeholder="Minutes">
                    <p id="optionalamountalert"><span class="label label-info" role="alert">Optional:</span></p>
-                   <input type="text" class="setup form-control" id="addMoney" placeholder="Enter amount earned manually">
+                   <input type="text" class="setup form-control" id="addDate" placeholder="Note/date">
+                   <input type="text" class="setup form-control" id="addMoney" placeholder="Amount earned">
                    <button class="btn" id="addConfirm">Add</button>
                   <table class="table" id="loggedpay"></table>
 
