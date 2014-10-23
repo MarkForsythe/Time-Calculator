@@ -126,7 +126,7 @@ if (localStorage.Payrate !== undefined) {
 	for(var incr = 1; incr <= localStorage.paycount; incr++ ) { 
 		totalsparse += parseFloat(localStorage.getItem('cachedPay'+incr));
 	};
-	$totals.html('<h2>$' + totalsparse.toFixed(2) + ' - ' + localStorage.storedhours + 'h ' + localStorage.storedminutes + 'm</h2>');
+	$totals.html('<h2>$' + totalsparse.toFixed(2) + ' - ' + localStorage.storedhours + 'h ' + localStorage.storedminutes + 'm </h2>');//' + localStorage.storedminutes + 'm</h2>');
     
     //Displaying each cachedPay and cachedHours
 	for(var incr = 1; incr <= localStorage.paycount; incr++ ) { 
@@ -240,6 +240,7 @@ var completesetup = function () {
 	localStorage.storedhours = '0';
 	localStorage.storedminutes = '0';
 };
+
 $enter.click(function () {
 	if ($('#manualpayrate').val().length != 0) {
 		hourlyrate = $manualpayrate.val() * 10000;
@@ -264,15 +265,18 @@ $clockedin.click(function () {
 	localStorage.cc = cc;
 });
 
-var runonce = true;
 //Looping code while clocked in
+	var cnt = 0;
+	var actvSecondHour = false;
+	var dispmins = 0;
+	var z = 0;
+	var t_hour = parseInt(localStorage.getItem('storedhours'));
+	var firsthour = false;
+		
+
 setInterval(function () {
 	if (isclockedin === true) {
-		if (runonce === true) {
 
-
-			runonce = false;
-		};
 		//Getting current time
 		c = new Date();
 		//Running function to convert time difference of cc and c
@@ -285,30 +289,80 @@ setInterval(function () {
 		secondrate = hourlyrate / 3600;
 		mkngamnt = (secondrate * tmelps) / 10000;
 
+
 		//Displaying time elapsed and money made
 		$timeprogression.html(hourslapse + 'h ' + minuteslapse + 'm ' + (secondslapse / 1000).toFixed(0) + 's');
 		$moneyprogression.html('$' + mkngamnt.toFixed(3));
 
 		//Calculating current total amount made,
 		totaltofixed = totalsparse + mkngamnt;
-		totalshour = parseInt(localStorage.getItem('storedhours')) + hourslapse;
-		totalsminute = parseInt(localStorage.getItem('storedminutes')) + minuteslapse;
 
         // Ensuring that if more than an hour has lapsed, an hour will be added and 60 minutes will be subtracted from storedminutes
-		if (totalsminute >= 60) {
-			var fixhours = parseInt(localStorage.getItem('storedhours'));
-			var fixmins = parseInt(localStorage.getItem('storedminutes'));
-			fixhours += 1;
-			fixmins -= 60;
-			fixhours += totalshour;
-			fixmins += totalsminute;
-			totalshour = fixhours;
-			totalsminute = fixmins;
+		var t_min = parseInt(localStorage.getItem('storedminutes')) + cnt;
+
+		if (cnt != minuteslapse && firsthour === false) {
+			cnt += 1;
 		};
+
+        if (t_min < 60) {
+        	dispmins = t_min;
+        };
+
+		if (t_min >= 60) {
+			actvSecondHour = true;
+			t_min = 0;
+		};
+
+		if (actvSecondHour === true) {
+			if (firsthour === false) {
+				t_hour += 1;
+				firsthour = true;
+			};
+			
+			if (cnt != minuteslapse) {
+				cnt2 += 1;
+				cnt += 1;
+			};
+			
+			if (cnt2 >= 60) {
+				t_hour += 1;
+				cnt2 = 0;
+
+			};
+			dispmins = cnt2;
+		};
+
+		// console.log("FIX" + fixminutesdef);
+		// console.log("TEST" + test23);
+		
+        
+		// if (savemins >= test23) {
+		// 	fixminutes += 60;
+		// 	savemins += 60;
+		// 	console.log("SSSS");
+		// 	fixminutesdef = minuteslapse - fixminutes;
+		// 	console.log(fixminutesdef);
+		// };
 
 		
 
-		$totals.html('<h2>$' + totaltofixed.toFixed(2) + ' - ' + totalshour + 'h ' + totalsminute + 'm</h2>');
+
+		// if (accessminutes >= 60) {
+		// 	var fixhours = parseInt(localStorage.getItem('storedhours')) + hourslapse;
+		// 	fixhours += 1;
+		// 	totalshour = fixhours;
+		// 	totalsminute = accessminutes;
+		// 	fixhours = 0;
+
+
+		// };
+
+      
+
+
+
+	console.log("T"+localStorage.storedminutes);
+		$totals.html('<h2>$' + totaltofixed.toFixed(2) + ' - ' + t_hour + 'h' + dispmins + 'm</h2>');
 	};
 }, 50);
 
@@ -316,34 +370,29 @@ setInterval(function () {
 $clockout.click(function () {
 
 	runonce = true;
+	bool = false;
+	firsthour = true;
+
 	isclockedin = false;
 	$clockout.hide();
 	$clockedin.fadeIn();
+	console.log("T"+localStorage.storedminutes);
 
-    // if (minuteslapse <= 60) {
-    // 	hourslapse += 1;
-    // 	minuteslapse -= 60;
-    // };
-    //Adding time lapsed to storedhours and storedminutes
-	allhrs = parseInt(localStorage.getItem('storedhours'));
-	allmnts = parseInt(localStorage.getItem('storedminutes'));
-	allhrs += hourslapse;
-	allmnts += minuteslapse;
-	localStorage.storedhours = allhrs;
-	localStorage.storedminutes = allmnts;
+
 
 	//Parsing pay count, adding one and saving
 	parsedpaycount = parseInt(localStorage.getItem('paycount')) + 1;
 	localStorage.paycount = parsedpaycount;
 
-
 	//Saving hours and minutes for subtraction from total upon deletion
 	localStorage['rmvhours' + localStorage.paycount] = hourslapse;
 	localStorage['rmvminutes' + localStorage.paycount] = minuteslapse;
+	localStorage['cachedHours'+localStorage.paycount] = hourslapse + 'h ' + minuteslapse + 'm';
+
+
 
 	//Setting cached amounts for display
     localStorage['cachedPay'+localStorage.paycount] = mkngamnt.toFixed(2);
-	localStorage['cachedHours'+localStorage.paycount] = hourslapse + 'h ' + minuteslapse + 'm';
 	var month = (new Date).getMonth() + 1; //months from 1-12
 	var day = (new Date).getDate();
 	localStorage['cachedDate'+localStorage.paycount] = month + "/" + day;
@@ -352,7 +401,33 @@ $clockout.click(function () {
 	totalsparse += parseFloat(localStorage.getItem('cachedPay'+localStorage.paycount));
 
     //Adding the table item displaying new tr
-	$('#loggedpay').prepend('<tr><td>' + localStorage.getItem('cachedDate' + localStorage.paycount) + '</td><td>$' + localStorage.getItem('cachedPay' + localStorage.paycount) + '</td><td>' + hourslapse + 'h ' + minuteslapse + 'm ' + '<button id="' + localStorage.paycount + '" class="btn delbtn"><span class="glyphicon glyphicon-trash"></span></button></td></tr>');
+	$('#loggedpay').prepend('<tr><td>' + localStorage.getItem('cachedDate' + localStorage.paycount) + '</td><td>$' + localStorage.getItem('cachedPay' + localStorage.paycount) + '</td><td>' + localStorage['cachedHours'+localStorage.paycount] + '<button id="' + localStorage.paycount + '" class="btn delbtn"><span class="glyphicon glyphicon-trash"></span></button></td></tr>');
+
+	// if (minuteslapse <= 60) {
+ //    	hourslapse += 1;
+ //    	minuteslapse -= 60;
+ //    };
+
+	//Adding time lapsed to storedhours and storedminutes
+	allhrs = parseInt(localStorage.getItem('storedhours'));
+	allmnts = parseInt(localStorage.getItem('storedminutes'));
+	allhrs += hourslapse;
+	allmnts += minuteslapse;
+	localStorage.storedhours = allhrs;
+	localStorage.storedminutes = allmnts;
+	console.log(localStorage.storedhours);
+	console.log("X"+localStorage.storedminutes);
+
+	var adjustminutes = parseInt(localStorage.getItem('storedminutes'));
+	for (var e = 1; adjustminutes >= 60; e++) {
+		var addinghours = parseInt(localStorage.getItem('storedhours'));
+		addinghours += 1;
+		adjustminutes -= 60;
+		localStorage.storedhours = addinghours;
+		localStorage.storedminutes = adjustminutes;
+	};
+
+
 	minute = 0;
 	second = 0;
 	hour = 0;
@@ -439,11 +514,8 @@ $(document).ready(function () {
 
 					allhrs = parseInt(localStorage.getItem('storedhours'));
 					allmnts = parseInt(localStorage.getItem('storedminutes'));
-					console.log(allmnts);
-
 					allhrs += addHours;
 					allmnts += addMinutes;
-					console.log(allmnts);
 					localStorage.storedhours = allhrs;
 					localStorage.storedminutes = allmnts;
 
