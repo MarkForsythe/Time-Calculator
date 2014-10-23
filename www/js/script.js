@@ -101,7 +101,7 @@ $moneyprogression.hide();
 $optionalamountalert.hide();
 $changerate.hide();
 $setupalert.html('<div class="alert alert-info" role="alert"><p class="setup" id="setup">Please get a pay-stub and enter...</p></div>');
-$manualalert.html('<span class="label label-info" role="alert">Or simply enter hourly rate manually:</span>');
+$manualalert.html('<span class="label label-info" role="alert">Or:</span>');
 $('#addMoney').hide();
 $('#addAlert').hide();
 $addButtonMinus.hide();
