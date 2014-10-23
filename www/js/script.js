@@ -313,76 +313,53 @@ setInterval(function () {
         // Ensuring that if more than an hour has lapsed, an hour will be added and 60 minutes will be subtracted from storedminutes
 
         //Keeping count of total minutes and minuteslapse count
-		if (cnt != minuteslapse && firsthouradd === false) {
+		if (cnt != minuteslapse) {
 			cnt += 1;
 			t_min += 1;
 		};
-        //Making minutes display as t_min before fist hour is up
-        if (t_min < 60) {
-        	dispmins = t_min;
-        };
 
 		if (t_min >= 60) {
-			actvSecondHour = true;
+			t_hour += 1;
+			t_min -= 60;
 		};
+        //Making minutes display as t_min before fist hour is up
+  //       if (t_min < 60) {
+  //       	dispmins = t_min;
+  //       };
 
-		if (actvSecondHour === true) {
-			dispmins = cnt2;
-			if (firsthouradd === false) {
-				t_hour += 1;
-				firsthouradd = true;
-			};
-			
-			if (cnt != minuteslapse) {
-				cnt2 += 1;
-				cnt += 1;
-				console.log("addmin")
-
-			};
-			
-			if (cnt2 >= 60) {
-				t_hour += 1;
-				cnt2 = 0;
-
-			};
-
-		};
-
-		// console.log("FIX" + fixminutesdef);
-		// console.log("TEST" + test23);
-		
-        
-		// if (savemins >= test23) {
-		// 	fixminutes += 60;
-		// 	savemins += 60;
-		// 	console.log("SSSS");
-		// 	fixminutesdef = minuteslapse - fixminutes;
-		// 	console.log(fixminutesdef);
+		// if (t_min >= 60) {
+		// 	actvSecondHour = true;
 		// };
 
-		
+		// if (actvSecondHour === true) {
+		// 	dispmins = cnt2;
+		// 	if (firsthouradd === false) {
+		// 		t_hour += 1;
+		// 		firsthouradd = true;
+		// 	};
+			
+			// if (cnt != minuteslapse && firsthouradd === true) {
+			// 	cnt2 += 1;
+			// 	cnt += 1;
+			// 	console.log("addmin");
 
-
-		// if (accessminutes >= 60) {
-		// 	var fixhours = parseInt(localStorage.getItem('storedhours')) + hourslapse;
-		// 	fixhours += 1;
-		// 	totalshour = fixhours;
-		// 	totalsminute = accessminutes;
-		// 	fixhours = 0;
-
-
+			// };
+			
+		// 	if (cnt2 >= 60) {
+		// 		t_hour += 1;
+		// 		cnt2 = 0;
+		// 	};
 		// };
-
-		$totals.html('<h2>$' + totaltofixed.toFixed(2) + ' - ' + t_hour + 'h ' + dispmins + 'm</h2>');
+		$totals.html('<h2>$' + totaltofixed.toFixed(2) + ' - ' + t_hour + 'h ' + t_min + 'm</h2>');
 	};
 }, 50);
 
 //Clock out action
 $clockout.click(function () {
 
-	actvSecondHour = false;
-	firsthouradd = true;
+	//actvSecondHour = false;
 	runonce = true;
+	cnt = 0;
 
 	isclockedin = false;
 	$clockout.hide();
