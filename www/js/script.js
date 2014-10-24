@@ -295,6 +295,8 @@ var t_min;
 
 setInterval(function () {
 	if (localStorage.isclockedin === 'true') {
+		$clockedin.hide();
+	    $clockout.show();
 		if (runonce === true) {
 			t_hour = parseInt(localStorage.getItem('storedhours'));
 			t_min = parseInt(localStorage.getItem('storedminutes'));
@@ -328,6 +330,20 @@ setInterval(function () {
         // Ensuring that if more than an hour has lapsed, an hour will be added and 60 minutes will be subtracted from storedminutes
 
         //Keeping count of total minutes and minuteslapse count
+
+
+
+//OLD METHOD
+		// if (cnt != minuteslapse) {
+		// 	cnt += 1;
+		// 	t_min += 1;
+		// };
+
+		// if (t_min >= 60) {
+		// 	t_hour += 1;
+		// 	t_min -= 60;
+		// };
+
 		if (cnt != minuteslapse) {
 			cnt += 1;
 			t_min += 1;
@@ -337,6 +353,11 @@ setInterval(function () {
 			t_hour += 1;
 			t_min -= 60;
 		};
+
+
+
+
+
         //Making minutes display as t_min before fist hour is up
   //       if (t_min < 60) {
   //       	dispmins = t_min;
