@@ -275,22 +275,18 @@ $enter.click(function () {
 
 //Setting isclockedin (starting the setInterval), changing toggle button, and creating the initial date time to count from
 $clockedin.click(function () {
-	isclockedin = true;
+	localStorage.isclockedin = true;
 	$clockedin.hide();
 	$clockout.fadeIn();
 	cc = new Date();
 	localStorage.cc = cc;
+	console.log("DDD"+ localStorage.cc);
 });
 
 //Looping code while clocked in
 var runonce = true;
 var cnt = 0;
-var cnt2 = 0;
-var actvSecondHour = false;
-var dispmins = 0;
-		//var z = 0;
 var t_hour;
-var firsthouradd = false;
 var t_min;
 		
 
@@ -298,7 +294,7 @@ var t_min;
 
 
 setInterval(function () {
-	if (isclockedin === true) {
+	if (localStorage.isclockedin === 'true') {
 		if (runonce === true) {
 			t_hour = parseInt(localStorage.getItem('storedhours'));
 			t_min = parseInt(localStorage.getItem('storedminutes'));
@@ -309,11 +305,13 @@ setInterval(function () {
 
 		//Getting current time
 		c = new Date();
+		var starttime = Date.parse(localStorage.cc);
+
 		//Running function to convert time difference of cc and c
-		timeDifference(c, cc);
+		timeDifference(c, starttime);
 
 		//Time elapsed in seconds
-		var tmelps = (c - cc) / 1000;
+		var tmelps = (c - starttime) / 1000;
 
 		//Calculating how much is made every second that's passed, and multiplying that by seconds elapsed
 		secondrate = hourlyrate / 3600;
@@ -378,7 +376,7 @@ $clockout.click(function () {
 	runonce = true;
 	cnt = 0;
 
-	isclockedin = false;
+	localStorage.isclockedin = false;
 	$clockout.hide();
 	$clockedin.fadeIn();
 	console.log("T"+localStorage.storedminutes);
