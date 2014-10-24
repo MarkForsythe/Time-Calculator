@@ -47,6 +47,9 @@ var $confirmdelete = $('#confirmdelete');
 
 var $manualpayrate = $('#manualpayrate');
 var $manualalert = $('#manualalert');
+var $calcalert = $('#calcalert');
+var $calcalert2 = $('#calcalert2');
+var $minutecount = $('#minutecount');
 var $optionalamountalert = $('#optionalamountalert');
 var $addButtonMinus = $('#addButtonMinus');
 
@@ -101,7 +104,7 @@ $moneyprogression.hide();
 $optionalamountalert.hide();
 $changerate.hide();
 $setupalert.html('<div class="alert alert-info" role="alert"><p class="setup" id="setup">Please get a pay-stub and enter...</p></div>');
-$manualalert.html('<span class="label label-info" role="alert">Or:</span>');
+//$manualalert.html('');
 $('#addMoney').hide();
 $('#addAlert').hide();
 $addButtonMinus.hide();
@@ -117,6 +120,9 @@ if (localStorage.Payrate !== undefined) {
 	$setuphide4.hide();
 	$setupalert.hide();
 	$manualalert.hide();
+	$calcalert2.hide();
+	$calcalert.hide();
+	$minutecount.hide();
 	$manualpayrate.hide();
 	$timeprogression.show();
 	$moneyprogression.show();
@@ -151,8 +157,11 @@ $changerate.click(function () {
 	
 	}
 	else {
-		$setupalert.html('<div class="alert alert-info" role="alert"><p class="setup" id="setup">Please get a pay-stub and enter...</p></div>');
+		$setupalert.html('<div class="alert alert-info" role="alert"><p class="setup" id="setup">To calculate your hourly pay rate, get a pay-stub and...</p></div>');
 		$manualalert.show();
+		$calcalert.show();
+		$calcalert2.show();
+		$minutecount.show();
 		$manualpayrate.show();
 		$('#enter').show();
 		$setuphide1.fadeIn();
@@ -229,6 +238,9 @@ var completesetup = function () {
 	$setuphide4.hide();	
 	$setupalert.hide();
 	$manualalert.hide();
+	$calcalert.hide();
+	$calcalert2.hide();
+	$minutecount.hide();
 	$manualpayrate.hide();
 
 	$payrate.fadeIn();
@@ -249,7 +261,12 @@ $enter.click(function () {
 
 	}
 	else {
-		hourlyrate = ($('#paycheckamount').val() / $('#hourcount').val()) * 10000;
+		var minutecountholder = parseInt($('#minutecount').val()) / 60;
+		console.log(minutecountholder);
+		var countholder = parseInt($('#hourcount').val()) + minutecountholder;
+		console.log('YT'+ $('#hourcount').val())
+		console.log(countholder);
+		hourlyrate = ($('#paycheckamount').val() / countholder) * 10000;
 		completesetup();
 
 	};
