@@ -281,6 +281,9 @@ $clockedin.click(function () {
 	cc = new Date();
 	localStorage.cc = cc;
 	console.log("DDD"+ localStorage.cc);
+	// var minsfix = parseInt(localStorage.getItem('storedminutes'));
+	// minsifx -= 1;
+	// localStorage.storedminutes = minsfix;
 });
 
 //Looping code while clocked in
@@ -288,6 +291,10 @@ var runonce = true;
 //var cnt = 0;
 //var t_hour;
 //var t_min;
+var t_min = 0;
+var timetestfixed = 0;
+var m = 0;
+var tminute = 0;
 
 
 
@@ -326,6 +333,9 @@ setInterval(function () {
 		//Calculating current total amount made,
 		totaltofixed = totalsparse + mkngamnt;
 
+		var timetest = tmelps / 60;
+		console.log(timetest);
+
         // Ensuring that if more than an hour has lapsed, an hour will be added and 60 minutes will be subtracted from storedminutes
 
         //Keeping count of total minutes and minuteslapse count
@@ -363,19 +373,48 @@ setInterval(function () {
 		// 		localStorage.storedhours = addinghours;
 		// 		localStorage.storedminutes = parsemin;
 		// 	};
+	if (started === true) {
+		timetestfixed = Math.floor(timetest);
+		if (t_min != timetestfixed) {
+			console.log(t_min+"T");
+			console.log(timetestfixed+"A");
+			t_min += 1;
+			m = parseInt(localStorage.getItem('storedminutes')) + 1;
+			localStorage.storedminutes = m;
+		};
 
 
-			totalshour = parseInt(localStorage.getItem('storedhours')) + hourslapse;
-			totalsminute = parseInt(localStorage.getItem('storedminutes')) + minuteslapse;
+  //       var smin = parseInt(localStorage.getItem('storedminutes')) + timetest;
+  //       localStorage.storedminutes = smin; 
+		// console.log(localStorage.storedminutes+"HDDHD");
 
-			if (totalsminute >= 60) {
-				var fixhours = parseInt(localStorage.getItem('storedhours'));
-				var fixmins = parseInt(localStorage.getItem('storedminutes'));
-				fixhours += 1;
-				fixmins -= 60;
-				localStorage.storedhours = fixhours;
-				localStorage.storedminutes = fixmins;
-			};
+		tminute = parseInt(localStorage.getItem('storedminutes'));
+		if (tminute >= 60) {
+			var fixhours = parseInt(localStorage.getItem('storedhours'));
+			var fixmins = parseInt(localStorage.getItem('storedminutes'));
+			fixhours += 1;
+			fixmins -= 60;
+			localStorage.storedhours = fixhours;
+			localStorage.storedminutes = fixmins;
+		};
+	};
+
+
+
+
+
+
+			// totalshour = parseInt(localStorage.getItem('storedhours')) + hourslapse;
+			// totalsminute = parseInt(localStorage.getItem('storedminutes')) + minuteslapse;
+
+			// if (totalsminute >= 60) {
+			// 	var fixhours = parseInt(localStorage.getItem('storedhours'));
+			// 	var fixmins = parseInt(localStorage.getItem('storedminutes'));
+			// 	fixhours += 1;
+			// 	fixmins -= 60;
+			// 	localStorage.storedhours = fixhours;
+			// 	localStorage.storedminutes = fixmins;
+			// };
 
 
 
@@ -423,16 +462,28 @@ setInterval(function () {
 		// 		cnt2 = 0;
 		// 	};
 		// };
-		$totals.html('<h2>$' + totaltofixed.toFixed(2) + ' - ' + localStorage.storedhours + 'h ' + totalsminute + 'm</h2>');
+		started = true;
+		$totals.html('<h2>$' + totaltofixed.toFixed(2) + ' - ' + localStorage.storedhours + 'h ' + localStorage.storedminutes + 'm</h2>');
 	};
 }, 50);
+
+var started; 
 
 //Clock out action
 $clockout.click(function () {
 
 	//actvSecondHour = false;
 	runonce = true;
+	started = false;
 	cnt = 0;
+	timetestfixed = 0;
+	t_min = 0;
+	m = 0;
+	tminute = 0;
+	fixhours = 0;
+	fixminutes = 0;
+	timetest = 0;
+	tmelps = 0;
 
 	localStorage.isclockedin = false;
 	$clockout.hide();
@@ -471,11 +522,11 @@ $clockout.click(function () {
 
 	//Adding time lapsed to storedhours and storedminutes
 	//allhrs = parseInt(localStorage.getItem('storedhours'));
-	allmnts = parseInt(localStorage.getItem('storedminutes'));
-	//allhrs += hourslapse;
-	allmnts += minuteslapse;
+	// allmnts = parseInt(localStorage.getItem('storedminutes'));
+	// //allhrs += hourslapse;
+	// allmnts += minuteslapse;
 	//localStorage.storedhours = allhrs;
-	localStorage.storedminutes = allmnts;
+	// localStorage.storedminutes = allmnts;
 	console.log(localStorage.storedhours);
 	console.log("X"+localStorage.storedminutes);
 
