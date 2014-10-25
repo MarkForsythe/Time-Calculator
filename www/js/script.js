@@ -285,10 +285,9 @@ $clockedin.click(function () {
 
 //Looping code while clocked in
 var runonce = true;
-var cnt = 0;
-var t_hour;
-var t_min;
-		
+//var cnt = 0;
+//var t_hour;
+//var t_min;
 
 
 
@@ -299,7 +298,7 @@ setInterval(function () {
 	    $clockout.show();
 		if (runonce === true) {
 			t_hour = parseInt(localStorage.getItem('storedhours'));
-			t_min = parseInt(localStorage.getItem('storedminutes'));
+			localStorage.sessionmins = localStorage.storedminutes;
 			console.log("ZZZZZZZZZZZZZZZZ");
 			runonce = false;
 		}
@@ -344,15 +343,53 @@ setInterval(function () {
 		// 	t_min -= 60;
 		// };
 
-		if (cnt != minuteslapse) {
-			cnt += 1;
-			t_min += 1;
-		};
 
-		if (t_min >= 60) {
-			t_hour += 1;
-			t_min -= 60;
-		};
+		// localStorage.storedminutes = parseInt(localStorage.getItem('storedminutes')) + minuteslapse;
+
+		// var parsetmins = parseInt(localStorage.getItem('storedminutes'));
+		// if (parsetmins >= 60) {
+
+		// };
+
+
+
+		// localStorage.storedminutes = parseInt(localStorage.getItem('storedminutes')) + minuteslapse;
+		// //localStorage.storedminutes = adjustminutes;
+		// var parsemin = parseInt(localStorage.getItem('storedminutes'));
+		// 	for (var e = 1; parsemin >= 60; e++) {
+		// 		var addinghours = parseInt(localStorage.getItem('storedhours'));
+		// 		addinghours += 1;
+		// 		parsemin -= 60;
+		// 		localStorage.storedhours = addinghours;
+		// 		localStorage.storedminutes = parsemin;
+		// 	};
+
+
+			totalshour = parseInt(localStorage.getItem('storedhours')) + hourslapse;
+			totalsminute = parseInt(localStorage.getItem('storedminutes')) + minuteslapse;
+
+			if (totalsminute >= 60) {
+				var fixhours = parseInt(localStorage.getItem('storedhours'));
+				var fixmins = parseInt(localStorage.getItem('storedminutes'));
+				fixhours += 1;
+				fixmins -= 60;
+				localStorage.storedhours = fixhours;
+				localStorage.storedminutes = fixmins;
+			};
+
+
+
+// var dispmins = parseInt(localStorage.getItem('sessionmins')) + minuteslapse;
+// 		if (dispmins < 60) {
+// 			localStorage.lapse2 = dispmins;
+// 			var savedlapse = minuteslapse;
+// 		};
+
+// 		if (dispmins >= 60) {
+// 				localStorage.lapse2 = minuteslapse - savedlapse;
+// 		};
+
+// 		localStorage.hlapse2 = parseInt(localStorage.getItem('storedhours')) + hourslapse;
 
 
 
@@ -386,7 +423,7 @@ setInterval(function () {
 		// 		cnt2 = 0;
 		// 	};
 		// };
-		$totals.html('<h2>$' + totaltofixed.toFixed(2) + ' - ' + t_hour + 'h ' + t_min + 'm</h2>');
+		$totals.html('<h2>$' + totaltofixed.toFixed(2) + ' - ' + localStorage.storedhours + 'h ' + totalsminute + 'm</h2>');
 	};
 }, 50);
 
@@ -433,23 +470,23 @@ $clockout.click(function () {
  //    };
 
 	//Adding time lapsed to storedhours and storedminutes
-	allhrs = parseInt(localStorage.getItem('storedhours'));
+	//allhrs = parseInt(localStorage.getItem('storedhours'));
 	allmnts = parseInt(localStorage.getItem('storedminutes'));
-	allhrs += hourslapse;
+	//allhrs += hourslapse;
 	allmnts += minuteslapse;
-	localStorage.storedhours = allhrs;
+	//localStorage.storedhours = allhrs;
 	localStorage.storedminutes = allmnts;
 	console.log(localStorage.storedhours);
 	console.log("X"+localStorage.storedminutes);
 
-	var adjustminutes = parseInt(localStorage.getItem('storedminutes'));
-	for (var e = 1; adjustminutes >= 60; e++) {
-		var addinghours = parseInt(localStorage.getItem('storedhours'));
-		addinghours += 1;
-		adjustminutes -= 60;
-		localStorage.storedhours = addinghours;
-		localStorage.storedminutes = adjustminutes;
-	};
+	// var adjustminutes = parseInt(localStorage.getItem('storedminutes'));
+	// for (var e = 1; adjustminutes >= 60; e++) {
+	// 	var addinghours = parseInt(localStorage.getItem('storedhours'));
+	// 	addinghours += 1;
+	// 	adjustminutes -= 60;
+	// 	localStorage.storedhours = addinghours;
+	// 	localStorage.storedminutes = adjustminutes;
+	// };
 
 
 	minute = 0;
