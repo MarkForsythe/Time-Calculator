@@ -200,8 +200,16 @@ $clearbtn.click(function () {
 			localStorage.removeItem('cachedPay'+incr);
 			localStorage.removeItem('cachedHours'+incr);
 		};
-		localStorage.storedminutes = 0;
-		localStorage.storedhours = 0;
+
+		if (localStorage.isclockedin === 'true') {
+			localStorage.storedminutes = minuteslapse;
+			localStorage.storedhours = hourslapse;
+		} 
+		else {
+			localStorage.storedminutes = 0;
+			localStorage.storedhours = 0;
+
+		};
 		localStorage.paycount = 0;
 		totalsparse = 0;
 		localStorage.ttlhr = 0;
@@ -379,15 +387,13 @@ setInterval(function () {
 			console.log(t_min+"T");
 			console.log(timetestfixed+"A");
 			t_min += 1;
-			m = parseInt(localStorage.getItem('storedminutes')) + 1;
-			localStorage.storedminutes = m;
+			if (timetestfixed === t_min) {
+				localStorage.storedminutes = parseInt(localStorage.getItem('storedminutes')) + 1;
+			};
 		};
-
-
   //       var smin = parseInt(localStorage.getItem('storedminutes')) + timetest;
   //       localStorage.storedminutes = smin; 
 		// console.log(localStorage.storedminutes+"HDDHD");
-
 		tminute = parseInt(localStorage.getItem('storedminutes'));
 		if (tminute >= 60) {
 			var fixhours = parseInt(localStorage.getItem('storedhours'));
@@ -727,6 +733,7 @@ var savedid2;
 
 
  			};
+
 
 
  			localStorage.removeItem('cachedDate'+savedid);
