@@ -208,7 +208,6 @@ $clearbtn.click(function () {
 		else {
 			localStorage.storedminutes = 0;
 			localStorage.storedhours = 0;
-
 		};
 		localStorage.paycount = 0;
 		totalsparse = 0;
@@ -270,10 +269,7 @@ $enter.click(function () {
 	}
 	else {
 		var minutecountholder = parseInt($('#minutecount').val()) / 60;
-		console.log(minutecountholder);
 		var countholder = parseInt($('#hourcount').val()) + minutecountholder;
-		console.log('YT'+ $('#hourcount').val())
-		console.log(countholder);
 		hourlyrate = ($('#paycheckamount').val() / countholder) * 10000;
 		completesetup();
 
@@ -303,6 +299,7 @@ var t_min = 0;
 var timetestfixed = 0;
 var m = 0;
 var tminute = 0;
+localStorage.t_min = 0;
 
 
 
@@ -383,11 +380,14 @@ setInterval(function () {
 		// 	};
 	if (started === true) {
 		timetestfixed = Math.floor(timetest);
-		if (t_min != timetestfixed) {
-			console.log(t_min+"T");
+		console.log("SSSSSSSSSSSSSSSSSSS" +localStorage.t_min)
+		if (parseInt(localStorage.getItem('t_min')) != timetestfixed) {
+			//console.log(t_min+"T");
 			console.log(timetestfixed+"A");
-			t_min += 1;
-			if (timetestfixed === t_min) {
+			var parsetmin = parseInt(localStorage.getItem('t_min')) + 1;
+			localStorage.t_min = parsetmin;
+			//t_min += 1;
+			if (timetestfixed === parseInt(localStorage.getItem('t_min'))) {
 				localStorage.storedminutes = parseInt(localStorage.getItem('storedminutes')) + 1;
 			};
 		};
@@ -490,6 +490,7 @@ $clockout.click(function () {
 	fixminutes = 0;
 	timetest = 0;
 	tmelps = 0;
+	localStorage.t_min = '0';
 
 	localStorage.isclockedin = false;
 	$clockout.hide();
