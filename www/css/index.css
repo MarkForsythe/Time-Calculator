@@ -31,10 +31,18 @@ h1 {
     text-align:center;
 }
 
-.container-fluid {
+h4 {
+    margin-bottom: 10px;
+}
+
+.app {
    background-image: url('../img/geometry2.png');
 
 
+}
+
+.table {
+    background-color: white;
 }
 
 .green {
