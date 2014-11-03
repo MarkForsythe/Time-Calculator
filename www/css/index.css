@@ -30,6 +30,26 @@ h1 {
     padding:0px;
     text-align:center;
 }
+
+.container-fluid {
+   background-image: url('../img/geometry2.png');
+
+
+}
+
+.green {
+    color: green;
+}
+.blue {
+    color: hsl(193, 32%, 49%);
+}
+.black {
+    color: black;
+}
+#totals {
+    margin-top: -15px;
+}
+
  #payrate {
     font-size: 19px;
     padding-top: 10px;
