@@ -380,6 +380,7 @@ $clockout.click(function () {
 	tmelps = tmelps * 60;
 	addtime += tmelps;
 	localStorage.totalTime = addtime;
+
 	tmelps = 0;
 	addtime = 0;
 	totalTimeFixed = 0;
@@ -558,9 +559,9 @@ $(document).ready(function () {
 
 
 					var totalTimeFixed2 = parseInt(localStorage.getItem('totalTime')) / 3600;
-					var amountToAdd = ((addMinutes / 60) + addHours) * 3600;
+					//var amountToAdd = ((addMinutes / 60) + addHours) * 3600;
 					console.log(totalTimeFixed2);
-					var timehours2 = totalTimeFixed2 + (amountToAdd / 3600);
+					var timehours2 = totalTimeFixed2;// + (amountToAdd / 3600);
 					console.log(timehours2);
 					var remainder2 = Math.floor(timehours2);
 					var timemins2 = Math.floor((timehours2 - remainder2) * 60);
