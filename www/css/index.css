@@ -42,7 +42,7 @@ h4 {
 }
 
 .floatleft {
-    float: left;
+    display: block;
 }
 
 .table {
