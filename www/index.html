@@ -58,9 +58,9 @@
                       <h5 id="calcalert"><span class="label label-info" role="alert">Enter total hours and minutes recieved:</span></h5>
                       <input type="number" class="setup form-control" id="hourcount" placeholder="Hours">
                       <input type="number" class="setup form-control" id="minutecount" placeholder="Minutes">
-                      <div><h5 id="calcalert2"><span class="label label-info" role="alert">And total amount made <i>after</i> taxes:</span></h5></div>
+                      <div class="floatleft"><h5 id="calcalert2"><span class="label label-info" role="alert">And total amount made <i>after</i> taxes:</span></h5></div>
                       <input type="text" class="setup form-control" id="paycheckamount" placeholder="eg., 203">
-                      <div><h5 id="manualalert"><span class="label label-primary" role="alert">Or, simply enter your pay rate yourself:</span></h5></div>
+                      <div class="floatleft"><h5 id="manualalert"><span class="label label-primary" role="alert">Or, simply enter your pay rate yourself:</span></h5></div>
                       <input type="number" class="setup form-control" id="manualpayrate" placeholder="e.g., 8.35">
 
                       <div><button class="btn-lg" id="enter">Enter</button></div>
@@ -79,15 +79,20 @@
 
                   <button class="btn" id="addButton"><span class="glyphicon glyphicon-plus"></span></button>
                   <button class="btn" id="addButtonMinus"><span class="glyphicon glyphicon-minus"></span></button>
-                  <div id="addAlert"></div>
-                  <input type="number" class="setup form-control" id="addHours" placeholder="Hours" min="0">
-                   <input type="number" class="setup form-control" id="addMinutes" placeholder="Minutes" min="0" max="59">
-                   <h4 id="optionalamountalert"><span class="label label-info" role="alert">Optional:</span></h4>
-                   <input type="text" class="setup form-control" id="addDate" placeholder="Note/date">
-                   <input type="number" class="setup form-control" id="addMoney" placeholder="Amount earned" min="0">
-                   <button class="btn" id="addConfirm">Add</button>
-                  <table class="table" id="loggedpay"></table>
 
+                  <div id="addPay">
+                      <div id="addAlert"></div>
+                      <input type="number" class="setup form-control" id="addHours" placeholder="Hours" min="0">
+                      <input type="number" class="setup form-control" id="addMinutes" placeholder="Minutes" min="0" max="59">
+                      <h4 id="optionalamountalert"><span class="label label-info" role="alert">Optional:</span></h4>
+                      <input type="text" class="setup form-control" id="addDate" placeholder="Note/date">
+                      <input type="number" class="setup form-control" id="addMoney" placeholder="Amount earned" min="0">
+                      <button class="btn" id="addConfirm">Add</button>
+                  </div>
+                  
+
+
+                  <table class="table" id="loggedpay"></table>
                   <button class="btn" id="clearbtn">Clear log</button>
                   <button class="btn" id="confirmdelete">Are you sure?</button>
                 </div>
