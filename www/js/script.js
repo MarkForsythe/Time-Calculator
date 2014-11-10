@@ -70,6 +70,9 @@ $(document).ready(function () {
 	var addHours = 0;
 	var addMinutes = 0;
 
+	$changerate_back = $('#changerate_back');
+	$changerate_back.hide();
+
 
 
 	//$('#addAlert').html('<div class="alert alert-danger" role="alert"><p class="setup" id="setup">Please enter less than 60 minutes.</p></div>');
@@ -109,9 +112,10 @@ $(document).ready(function () {
 	$('#addMoney').hide();
 	$('#addAlert').hide();
 	$addButtonMinus.hide();
-	$addButton.hide();
-	$('#earningshead').hide();
 	$clearbtn.hide();
+	//$addButton.hide();
+	//$('#earningshead').hide();
+	
 
 
 	//Initial conditions for returning user
@@ -175,6 +179,7 @@ $(document).ready(function () {
 		
 		}
 		else {
+			$changerate_back.show();
 			$setupalert.html('<div class="alert alert-info" role="alert"><p class="setup" id="setup">To calculate your hourly pay rate, get a pay-stub and...</p></div>');
 			$manualalert.show();
 			$calcalert.show();
@@ -195,6 +200,28 @@ $(document).ready(function () {
 
 		};
 		
+	});
+
+	$changerate_back.on('click', function () {
+	    $changerate_back.hide();
+		$setupalert.hide();
+		$manualalert.hide();
+		$calcalert.hide();
+		$calcalert2.hide();
+		$minutecount.hide();
+		$manualpayrate.hide();
+		$('#enter').hide();
+		$setuphide1.hide();
+		$setuphide2.hide();
+		$setuphide3.hide();
+		$setuphide4.hide();
+
+		$changerate.show();
+		$payrate.show();
+		$timeprogression.show();
+		$moneyprogression.show();
+		$clockedin.show();
+
 	});
 
 	//Button for reseting all cached data, except your payrate
@@ -462,7 +489,7 @@ $(document).ready(function () {
 	$(document).ready(function () {
 
 		$addButton.click(function () {
-			$('#addPay').slideDown(300);
+			$('#addPay').fadeIn();
 			$addButton.hide();
 
 			$addButtonMinus.show();

@@ -42,6 +42,7 @@ h4 {
 }
 
 .floatleft {
+    margin-top: 5px;
     float: left;
     width: 100%;
 
@@ -71,6 +72,10 @@ h4 {
  }
 #changerate {
     margin-top: -7px;
+}
+#changerate_back {
+    margin-left: -85%;
+    margin-bottom: 5px;
 }
 #moneyprogression {
     font-size: 70px;
@@ -106,6 +111,7 @@ td {
 #addButton, #addButtonMinus {
  
     margin-bottom: 5px;
+    margin-top: 10px;
 }
 
 #addConfirm {
@@ -127,9 +133,7 @@ td {
     display: inline-block;
 }
 
-#calcalert2 {
-    margin-top: 15px;
-}
+
 
 
 
