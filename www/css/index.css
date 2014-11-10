@@ -42,7 +42,9 @@ h4 {
 }
 
 .floatleft {
-    display: block;
+
+    float: left;
+    margin-left: 25vw;
 }
 
 .table {
